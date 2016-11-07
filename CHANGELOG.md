@@ -9,3 +9,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Go standard-library core (`internal/harbor`) modeling passkey ceremonies:
+  - Cryptographically secure challenge generation (`crypto/rand`), 16-byte
+    spec minimum with a 32-byte default.
+  - Unpadded base64url encode/decode helpers.
+  - Client data (`webauthn.create` / `webauthn.get`) marshaling and SHA-256
