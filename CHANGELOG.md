@@ -13,3 +13,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
     spec minimum with a 32-byte default.
   - Unpadded base64url encode/decode helpers.
   - Client data (`webauthn.create` / `webauthn.get`) marshaling and SHA-256
+    hashing.
+  - Authenticator data marshaling/parsing with UP/UV/BE/BS/AT/ED flag handling
+    and a big-endian signature counter.
+  - Virtual authenticator holding Ed25519 discoverable credentials with a
