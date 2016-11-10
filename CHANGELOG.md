@@ -21,3 +21,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - Relying-party verification: origin, ceremony type, challenge equality,
     RP ID hash, user-verification policy, user-presence, Ed25519 assertion
     signature verification, and signature-counter monotonicity.
+- Built-in conformance scenario suite (registration, authentication, policy and
+  security categories) with positive and negative expectations.
+- Conformance report engine emitting JSON (schema `passkeypier/report/v1`) and
+  human-readable text.
