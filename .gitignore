@@ -1,0 +1,19 @@
+# Go build artifacts
+/passkeypier
+/passkeypier.exe
+*.test
+*.out
+coverage.*
+
+# Generated reports (regenerate with `make report`)
+/report.json
+
+# TypeScript build output and deps
+web/dist/
+web/node_modules/
+*.tsbuildinfo
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
+.idea/
