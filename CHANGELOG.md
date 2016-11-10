@@ -25,3 +25,6 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   security categories) with positive and negative expectations.
 - Conformance report engine emitting JSON (schema `passkeypier/report/v1`) and
   human-readable text.
+- `passkeypier` CLI with `run`, `demo`, `list` and `version` subcommands.
+- Focused unit tests and runnable Go examples.
+- Dependency-light TypeScript browser lab (`web/`) that validates and renders
