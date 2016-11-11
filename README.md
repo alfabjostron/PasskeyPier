@@ -39,3 +39,19 @@ transport bindings. The exact scope and the honest list of non-goals live in
 - [License](#license)
 
 ---
+
+## Why a pier
+
+A passkey ceremony is a small piece of maritime choreography. The relying party
+(the harbor) issues a one-time challenge, a bottle thrown into the water. The
+authenticator (a ship carrying a private Ed25519 key) writes its reply, seals it
+with a signature, and sends it back. The harbor's lighthouse checks every
+returning vessel. Is this the right origin? The challenge I actually issued?
+Bound to my relying-party identifier? Did the signature counter advance, or is
+this a cloned ship? Only when every check passes may the credential dock.
+
+passkeypier makes that choreography runnable and testable, with no browser or
+hardware key in sight.
+
+---
+
