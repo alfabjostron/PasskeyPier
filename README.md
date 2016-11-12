@@ -55,3 +55,19 @@ hardware key in sight.
 
 ---
 
+## What sails in and out
+
+Implemented against the Go standard library only (`crypto/ed25519`,
+`crypto/rand`, `crypto/sha256`, `encoding/base64`, `encoding/json`,
+`encoding/binary`):
+
+- **Secure challenges** from `crypto/rand`, with the 16-byte spec minimum
+  enforced and a 32-byte default.
+- **`base64url`** encode and decode without padding, with lenient decoding for
+  hand-authored fixtures.
+- **Client data** for `webauthn.create` and `webauthn.get`: canonical JSON,
+  SHA-256 `clientDataHash`, strict decoding that rejects unknown fields.
+- **Authenticator data** in the exact wire layout
+  `rpIdHash(32) then flags(1) then signCount(4, big-endian) then trailing`,
+  with UP, UV, BE, BS, AT, and ED flags.
+- **Virtual authenticator** holding resident (discoverable) Ed25519 credentials,
