@@ -88,3 +88,19 @@ scenarios. It carries no runtime dependencies and makes no network access.
 ## Quick departure
 
 You need **Go 1.24+**. The web lab additionally needs a TypeScript compiler
+(`tsc`) if you want to typecheck or build it.
+
+```sh
+# Run the full conformance suite (human-readable)
+go run ./cmd/passkeypier run
+
+# Emit a JSON report for the browser lab
+go run ./cmd/passkeypier run -format json -out report.json
+
+# Perform a single honest register plus authenticate ceremony
+go run ./cmd/passkeypier demo
+
+# List every scenario and what it asserts
+go run ./cmd/passkeypier list
+```
+
