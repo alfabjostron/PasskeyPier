@@ -185,3 +185,19 @@ schema:    passkeypier/report/v1
        rejected as expected: harbor: challenge mismatch (possible replay or wrong ceremony)
 [PASS] authenticate/tampered-signature            (security, expect reject)
        rejected as expected: harbor: assertion signature verification failed
+[PASS] authenticate/uv-required-satisfied         (policy, expect accept)
+       ceremony accepted as expected
+[PASS] authenticate/wrong-origin                  (authentication, expect reject)
+       rejected as expected: harbor: origin "https://evil.example", want "https://harbor.example"
+[PASS] authenticate/wrong-rp-binding              (security, expect reject)
+       rejected as expected: harbor: RP ID hash mismatch
+[PASS] register/happy-path-uv-preferred           (registration, expect accept)
+       ceremony accepted as expected
+[PASS] register/uv-required-without-uv-support    (registration, expect reject)
+       rejected as expected: harbor: authenticator does not support user verification
+
+by category:
+  authentication pass=3 fail=0
+  policy         pass=1 fail=0
+  registration   pass=2 fail=0
+  security       pass=3 fail=0
