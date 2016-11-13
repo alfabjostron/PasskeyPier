@@ -104,3 +104,19 @@ go run ./cmd/passkeypier demo
 go run ./cmd/passkeypier list
 ```
 
+Or use the Makefile:
+
+```sh
+make            # build + test
+make run        # text conformance report
+make report     # writes report.json
+make demo       # one ceremony
+make help       # list all targets
+```
+
+---
+
+## The two ceremonies at the dock
+
+<p align="center">
+  <img src="docs/assets/ceremony-dock.svg" alt="Data flow between relying party and authenticator: a challenge goes out, authenticator data and an Ed25519 signature come back" width="680" />
