@@ -136,3 +136,19 @@ and signs the concatenation `authenticatorData then SHA-256(clientData)` with
 Ed25519. The harbor verifies everything registration checks, plus the signature
 against the stored public key and the counter's monotonic advance.
 
+The signed message is identical in structure to a real WebAuthn assertion:
+
+```
+message   = authenticatorData || SHA-256(clientDataJSON)
+signature = Ed25519_Sign(credentialPrivateKey, message)
+```
+
+---
+
+## Command transcripts
+
+These are real outputs from the tool. Random values (credential ids, keys,
+signatures, timestamps) will differ per run.
+
+### `passkeypier demo -uv required`
+
