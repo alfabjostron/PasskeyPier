@@ -169,3 +169,19 @@ Note that the credential id in the assertion matches the one from registration,
 and the base64url signature is 86 characters (64 raw Ed25519 bytes).
 
 ### `passkeypier run`
+
+```text
+$ go run ./cmd/passkeypier run
+passkeypier conformance report
+==============================
+generated: 2026-08-31T17:54:56Z
+schema:    passkeypier/report/v1
+
+[PASS] authenticate/cloned-counter-regression     (security, expect reject)
+       rejected as expected: harbor: signature counter did not increase (stored=99, got=1): possible cloned authenticator
+[PASS] authenticate/happy-path                    (authentication, expect accept)
+       ceremony accepted as expected
+[PASS] authenticate/replayed-challenge            (authentication, expect reject)
+       rejected as expected: harbor: challenge mismatch (possible replay or wrong ceremony)
+[PASS] authenticate/tampered-signature            (security, expect reject)
+       rejected as expected: harbor: assertion signature verification failed
