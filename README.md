@@ -233,3 +233,20 @@ authenticate/wrong-rp-binding                [security, expect reject]
     Authenticator data carrying a foreign RP ID hash must fail the RP ID hash check.
 ```
 
+---
+
+## Conformance scenarios
+
+Each scenario is a self-contained check with an expectation: either the harbor
+should accept the ceremony, or it should reject it. A negative scenario that is
+accidentally accepted counts as a conformance failure, which is how the lab
+exercises the security checks.
+
+| Scenario | Category | Expect | What it proves |
+| --- | --- | --- | --- |
+| `register/happy-path-uv-preferred` | registration | accept | Honest create ceremony with a UV-capable authenticator. |
+| `register/uv-required-without-uv-support` | registration | reject | `UV=required` fails when the authenticator cannot verify the user. |
+| `authenticate/happy-path` | authentication | accept | Signature, origin, and counter all valid end to end. |
+| `authenticate/wrong-origin` | authentication | reject | A foreign origin in client data is caught. |
+| `authenticate/replayed-challenge` | authentication | reject | A stale or mismatched challenge fails the equality check. |
+| `authenticate/uv-required-satisfied` | policy | accept | `UV=required` sets and enforces the UV flag. |
