@@ -201,3 +201,19 @@ by category:
   policy         pass=1 fail=0
   registration   pass=2 fail=0
   security       pass=3 fail=0
+
+summary: 9 passed, 0 failed of 9 total
+result: ALL SCENARIOS PASSED
+```
+
+The process exits `0` when every scenario meets its expectation and `1` when any
+conformance failure is present, which is convenient for CI gating.
+
+### `passkeypier list`
+
+```text
+$ go run ./cmd/passkeypier list
+register/happy-path-uv-preferred             [registration, expect accept]
+    Honest registration with a UV-capable authenticator and preferred policy.
+register/uv-required-without-uv-support      [registration, expect reject]
+    UV=required against an authenticator that cannot verify the user must be rejected.
