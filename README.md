@@ -250,3 +250,19 @@ exercises the security checks.
 | `authenticate/wrong-origin` | authentication | reject | A foreign origin in client data is caught. |
 | `authenticate/replayed-challenge` | authentication | reject | A stale or mismatched challenge fails the equality check. |
 | `authenticate/uv-required-satisfied` | policy | accept | `UV=required` sets and enforces the UV flag. |
+| `authenticate/cloned-counter-regression` | security | reject | A non-advancing counter signals a cloned authenticator. |
+| `authenticate/tampered-signature` | security | reject | A forged or flipped signature fails Ed25519 verification. |
+| `authenticate/wrong-rp-binding` | security | reject | Authenticator data with a foreign RP ID hash is rejected. |
+
+---
+
+## The report format
+
+Reports carry the schema tag `passkeypier/report/v1`. The JSON shape:
+
+```json
+{
+  "schema": "passkeypier/report/v1",
+  "tool": "passkeypier",
+  "generated_at": "2026-08-31T17:59:21Z",
+  "summary": { "total": 9, "passed": 9, "failed": 0, "all_passed": true },
