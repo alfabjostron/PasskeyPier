@@ -282,3 +282,19 @@ Reports carry the schema tag `passkeypier/report/v1`. The JSON shape:
       "detail": "rejected as expected: harbor: origin \"https://evil.example\", want \"https://harbor.example\"",
       "duration_ns": 41000
     }
+  ]
+}
+```
+
+A full sample lives at [`examples/sample-report.json`](examples/sample-report.json).
+Regenerate it any time with `make report` or the `-out` flag.
+
+Programmatic use from Go is equally direct (see
+[`examples/demo_test.go`](examples/demo_test.go)):
+
+```go
+results := harbor.RunScenarios(harbor.DefaultScenarios())
+report := harbor.BuildReport(results)
+_ = report.WriteJSON(os.Stdout) // or report.WriteText(os.Stdout)
+```
+
