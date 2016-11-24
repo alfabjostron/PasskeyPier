@@ -1,0 +1,14 @@
+{
+  "name": "passkeypier-web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Dependency-light browser lab that renders passkeypier conformance reports.",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "5.5.4"
+  },
+  "license": "MIT"
