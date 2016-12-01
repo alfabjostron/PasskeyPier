@@ -298,3 +298,19 @@ report := harbor.BuildReport(results)
 _ = report.WriteJSON(os.Stdout) // or report.WriteText(os.Stdout)
 ```
 
+---
+
+## The browser lab
+
+The lab in [`web/`](web/) is a small, dependency-light TypeScript app. It:
+
+- validates an untrusted report against the `passkeypier/report/v1` schema
+  before rendering, rejecting bad types, unknown outcomes, and a wrong schema;
+- renders a pass or fail banner, per-category cards, and expandable scenarios;
+- builds DOM nodes with `textContent` and never `innerHTML` from report data;
+- runs fully offline, with no CDN, fonts, images, or telemetry. A sample report
+  is embedded in the page so it works with zero network access.
+
+```sh
+cd web
+tsc --noEmit     # strict typecheck
