@@ -347,3 +347,19 @@ passkeypier/
 │   ├── demo_test.go
 │   └── sample-report.json
 ├── web/                    # dependency-light TypeScript browser lab
+│   ├── src/{types,report,render,main}.ts
+│   ├── index.html
+│   ├── styles.css
+│   ├── tsconfig.json
+│   └── package.json
+├── docs/
+│   ├── SPEC.md             # precise scope, data model, non-goals
+│   └── assets/             # two original SVG diagrams (no remote media)
+├── .github/workflows/ci.yml
+├── Makefile
+├── go.mod
+├── LICENSE
+├── CHANGELOG.md
+└── .gitignore
+```
+
