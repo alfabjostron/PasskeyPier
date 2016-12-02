@@ -331,3 +331,19 @@ dock, choose a file, or click **Load bundled sample**.
 passkeypier/
 ├── cmd/passkeypier/        # CLI: run | demo | list | version
 │   └── main.go
+├── internal/harbor/        # standard-library ceremony core
+│   ├── base64url.go        # unpadded base64url
+│   ├── challenge.go        # crypto/rand challenges
+│   ├── model.go            # client data, authenticator data, flags
+│   ├── authenticator.go    # virtual Ed25519 authenticator + counters
+│   ├── relyingparty.go     # RP config, UV policy, options
+│   ├── ceremony.go         # register/authenticate + all verifications
+│   ├── scenarios.go        # built-in conformance suite
+│   ├── report.go           # JSON + text report engine
+│   ├── helpers.go          # negative-test primitives
+│   ├── json.go             # strict decode + origin constructors
+│   └── harbor_test.go      # focused unit tests
+├── examples/               # runnable examples + sample report
+│   ├── demo_test.go
+│   └── sample-report.json
+├── web/                    # dependency-light TypeScript browser lab
