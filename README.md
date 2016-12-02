@@ -314,3 +314,20 @@ The lab in [`web/`](web/) is a small, dependency-light TypeScript app. It:
 ```sh
 cd web
 tsc --noEmit     # strict typecheck
+tsc              # compile to web/dist
+```
+
+Then open `web/index.html` in a browser and either drop a `report.json` onto the
+dock, choose a file, or click **Load bundled sample**.
+
+> The lab is a report viewer and teaching aid. It does not itself invoke the
+> browser WebAuthn API; the ceremonies are performed by the Go core.
+
+---
+
+## Layout of the harbor
+
+```
+passkeypier/
+├── cmd/passkeypier/        # CLI: run | demo | list | version
+│   └── main.go
