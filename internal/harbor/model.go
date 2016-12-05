@@ -25,3 +25,11 @@ const (
 	FlagBackupEligible byte = 1 << 3 // BE
 	FlagBackupState    byte = 1 << 4 // BS
 	FlagAttestedData   byte = 1 << 6 // AT
+	FlagExtensionData  byte = 1 << 7 // ED
+)
+
+// ClientData is the client-collected data hashed and signed during a ceremony.
+// The JSON serialization mirrors the browser's clientDataJSON structure.
+type ClientData struct {
+	Type        CeremonyType `json:"type"`
+	Challenge   string       `json:"challenge"` // base64url
