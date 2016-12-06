@@ -33,3 +33,12 @@ const (
 type ClientData struct {
 	Type        CeremonyType `json:"type"`
 	Challenge   string       `json:"challenge"` // base64url
+	Origin      string       `json:"origin"`
+	CrossOrigin bool         `json:"crossOrigin"`
+}
+
+// Marshal serializes the client data to its canonical JSON byte form. This is
+// the exact byte sequence whose SHA-256 hash is signed by the authenticator.
+func (cd ClientData) Marshal() ([]byte, error) {
+	return json.Marshal(cd)
+}
