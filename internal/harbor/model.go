@@ -42,3 +42,11 @@ type ClientData struct {
 func (cd ClientData) Marshal() ([]byte, error) {
 	return json.Marshal(cd)
 }
+
+// Hash returns the SHA-256 of the marshaled client data (the "clientDataHash").
+func (cd ClientData) Hash() ([]byte, error) {
+	raw, err := cd.Marshal()
+	if err != nil {
+		return nil, err
+	}
+	sum := sha256.Sum256(raw)
