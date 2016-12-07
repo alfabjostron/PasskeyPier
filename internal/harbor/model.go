@@ -50,3 +50,11 @@ func (cd ClientData) Hash() ([]byte, error) {
 		return nil, err
 	}
 	sum := sha256.Sum256(raw)
+	return sum[:], nil
+}
+
+// AuthenticatorData models the authenticator data structure. Attested
+// credential data and extensions are represented as opaque trailing bytes so
+// that signature computation over the concatenation stays byte-accurate.
+type AuthenticatorData struct {
+	RPIDHash  [32]byte
