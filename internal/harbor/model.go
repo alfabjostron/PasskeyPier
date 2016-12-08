@@ -67,3 +67,11 @@ type AuthenticatorData struct {
 // flags(1) || signCount(4, big-endian) || trailing.
 func (ad AuthenticatorData) Marshal() []byte {
 	out := make([]byte, 37+len(ad.Trailing))
+	copy(out[0:32], ad.RPIDHash[:])
+	out[32] = ad.Flags
+	binary.BigEndian.PutUint32(out[33:37], ad.SignCount)
+	copy(out[37:], ad.Trailing)
+	return out
+}
+
+// ParseAuthenticatorData decodes the fixed-length prefix of authenticator data.
