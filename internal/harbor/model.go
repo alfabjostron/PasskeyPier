@@ -75,3 +75,12 @@ func (ad AuthenticatorData) Marshal() []byte {
 }
 
 // ParseAuthenticatorData decodes the fixed-length prefix of authenticator data.
+func ParseAuthenticatorData(raw []byte) (AuthenticatorData, error) {
+	if len(raw) < 37 {
+		return AuthenticatorData{}, fmt.Errorf("harbor: authenticator data too short: %d bytes", len(raw))
+	}
+	var ad AuthenticatorData
+	copy(ad.RPIDHash[:], raw[0:32])
+	ad.Flags = raw[32]
+	ad.SignCount = binary.BigEndian.Uint32(raw[33:37])
+	if len(raw) > 37 {
