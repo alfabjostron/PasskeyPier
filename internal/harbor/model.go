@@ -58,3 +58,12 @@ func (cd ClientData) Hash() ([]byte, error) {
 // that signature computation over the concatenation stays byte-accurate.
 type AuthenticatorData struct {
 	RPIDHash  [32]byte
+	Flags     byte
+	SignCount uint32
+	Trailing  []byte // attested credential data + extensions, if present
+}
+
+// Marshal encodes authenticator data in the wire layout: rpIdHash(32) ||
+// flags(1) || signCount(4, big-endian) || trailing.
+func (ad AuthenticatorData) Marshal() []byte {
+	out := make([]byte, 37+len(ad.Trailing))
