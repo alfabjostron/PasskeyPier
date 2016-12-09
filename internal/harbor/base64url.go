@@ -1,3 +1,7 @@
 // Package harbor implements a virtual Passkey/WebAuthn conformance lab.
 //
 // It models the client/authenticator/relying-party interactions of a passkey
+// ceremony (registration and authentication) using only the Go standard
+// library. The implementation is intentionally focused on the parts of the
+// WebAuthn Level 2 / CTAP data model that can be exercised deterministically
+// in a test harness: challenge generation, base64url handling, origin and
