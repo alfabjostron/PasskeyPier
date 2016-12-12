@@ -5,3 +5,6 @@
 // library. The implementation is intentionally focused on the parts of the
 // WebAuthn Level 2 / CTAP data model that can be exercised deterministically
 // in a test harness: challenge generation, base64url handling, origin and
+// relying-party identifier checks, signature counters, user-verification
+// policy evaluation and Ed25519 (COSE alg -8 / OKP) signing and verification.
+//
