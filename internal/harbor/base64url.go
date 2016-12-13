@@ -8,3 +8,7 @@
 // relying-party identifier checks, signature counters, user-verification
 // policy evaluation and Ed25519 (COSE alg -8 / OKP) signing and verification.
 //
+// This package is a teaching and conformance-exploration tool. It is NOT a
+// FIDO-certified implementation and makes no certification claims. It does not
+// implement attestation statement verification, CBOR, or transport bindings.
+package harbor
