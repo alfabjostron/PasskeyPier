@@ -12,3 +12,7 @@
 // FIDO-certified implementation and makes no certification claims. It does not
 // implement attestation statement verification, CBOR, or transport bindings.
 package harbor
+
+import "encoding/base64"
+
+// b64url is the unpadded base64url encoding mandated by WebAuthn for the
