@@ -16,3 +16,7 @@ package harbor
 import "encoding/base64"
 
 // b64url is the unpadded base64url encoding mandated by WebAuthn for the
+// serialization of binary values in the JSON client-data and credential
+// exchange (see WebAuthn L2 sec. 5.2, base64url without trailing '=').
+var b64url = base64.RawURLEncoding
+
