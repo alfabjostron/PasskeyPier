@@ -23,3 +23,7 @@ var b64url = base64.RawURLEncoding
 // EncodeBase64URL encodes raw bytes as unpadded base64url text.
 func EncodeBase64URL(raw []byte) string {
 	return b64url.EncodeToString(raw)
+}
+
+// DecodeBase64URL decodes unpadded base64url text into raw bytes. It also
+// tolerates padded input to be forgiving of hand-authored fixtures.
