@@ -20,3 +20,6 @@ import "encoding/base64"
 // exchange (see WebAuthn L2 sec. 5.2, base64url without trailing '=').
 var b64url = base64.RawURLEncoding
 
+// EncodeBase64URL encodes raw bytes as unpadded base64url text.
+func EncodeBase64URL(raw []byte) string {
+	return b64url.EncodeToString(raw)
