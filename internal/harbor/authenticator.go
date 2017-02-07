@@ -26,3 +26,11 @@ type VirtualAuthenticator struct {
 }
 
 type credential struct {
+	id        []byte
+	priv      ed25519.PrivateKey
+	pub       ed25519.PublicKey
+	rpID      string
+	signCount uint32
+	backedUp  bool
+}
+
