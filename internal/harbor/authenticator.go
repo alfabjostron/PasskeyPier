@@ -17,3 +17,12 @@ type VirtualAuthenticator struct {
 	// AAGUID identifies the authenticator model (16 bytes). Zero for privacy.
 	AAGUID [16]byte
 	// SupportsUV indicates the authenticator can perform user verification
+	// (biometric or PIN). If false, UV-required ceremonies must fail.
+	SupportsUV bool
+	// BackupEligible marks credentials as multi-device (synced passkeys).
+	BackupEligible bool
+
+	creds map[string]*credential // keyed by base64url credential id
+}
+
+type credential struct {
