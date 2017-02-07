@@ -22,3 +22,6 @@ func NewChallenge(n int) (Challenge, error) {
 	if n < minChallengeLen {
 		return nil, fmt.Errorf("harbor: challenge length %d below minimum %d", n, minChallengeLen)
 	}
+	buf := make([]byte, n)
+	if _, err := rand.Read(buf); err != nil {
+		return nil, fmt.Errorf("harbor: reading random challenge: %w", err)
