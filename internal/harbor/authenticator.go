@@ -34,3 +34,12 @@ type credential struct {
 	backedUp  bool
 }
 
+// NewVirtualAuthenticator constructs an authenticator with the given UV
+// capability. The AAGUID is left zero (privacy-preserving default).
+func NewVirtualAuthenticator(supportsUV bool) *VirtualAuthenticator {
+	return &VirtualAuthenticator{
+		SupportsUV: supportsUV,
+		creds:      make(map[string]*credential),
+	}
+}
+
