@@ -43,3 +43,11 @@ func NewVirtualAuthenticator(supportsUV bool) *VirtualAuthenticator {
 	}
 }
 
+// CredentialCount reports the number of resident credentials.
+func (va *VirtualAuthenticator) CredentialCount() int { return len(va.creds) }
+
+// makeCredential generates a fresh Ed25519 credential bound to rpID and stores
+// it as a discoverable (resident) credential.
+func (va *VirtualAuthenticator) makeCredential(rpID string) (*credential, error) {
+	pub, priv, err := ed25519.GenerateKey(rand.Reader)
+	if err != nil {
