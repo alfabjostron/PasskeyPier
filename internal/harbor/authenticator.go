@@ -68,3 +68,12 @@ func (va *VirtualAuthenticator) makeCredential(rpID string) (*credential, error)
 	va.creds[EncodeBase64URL(id)] = c
 	return c, nil
 }
+
+// lookup finds a resident credential by base64url id.
+func (va *VirtualAuthenticator) lookup(credIDB64 string) (*credential, bool) {
+	c, ok := va.creds[credIDB64]
+	return c, ok
+}
+
+// buildAuthData assembles authenticator data with the appropriate flags.
+// includeAttested controls whether the AT flag and attested credential data
