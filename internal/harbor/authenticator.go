@@ -60,3 +60,11 @@ func (va *VirtualAuthenticator) makeCredential(rpID string) (*credential, error)
 	c := &credential{
 		id:        id,
 		priv:      priv,
+		pub:       pub,
+		rpID:      rpID,
+		signCount: 0,
+		backedUp:  va.BackupEligible,
+	}
+	va.creds[EncodeBase64URL(id)] = c
+	return c, nil
+}
