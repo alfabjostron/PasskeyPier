@@ -51,3 +51,12 @@ func (va *VirtualAuthenticator) CredentialCount() int { return len(va.creds) }
 func (va *VirtualAuthenticator) makeCredential(rpID string) (*credential, error) {
 	pub, priv, err := ed25519.GenerateKey(rand.Reader)
 	if err != nil {
+		return nil, fmt.Errorf("harbor: generating ed25519 key: %w", err)
+	}
+	id := make([]byte, 16)
+	if _, err := rand.Read(id); err != nil {
+		return nil, fmt.Errorf("harbor: generating credential id: %w", err)
+	}
+	c := &credential{
+		id:        id,
+		priv:      priv,
