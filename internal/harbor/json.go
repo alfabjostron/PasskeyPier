@@ -12,3 +12,6 @@ func decodeStrict(data []byte, v any) error {
 	dec.DisallowUnknownFields()
 	return dec.Decode(v)
 }
+
+// Origin constructs a same-origin client context that faithfully reports the
+// given origin (the honest path).
