@@ -15,3 +15,6 @@ func decodeStrict(data []byte, v any) error {
 
 // Origin constructs a same-origin client context that faithfully reports the
 // given origin (the honest path).
+func Origin(origin string) clientOrigin {
+	return clientOrigin{origin: origin, crossOrigin: false}
+}
