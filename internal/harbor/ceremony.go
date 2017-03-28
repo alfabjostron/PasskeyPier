@@ -41,3 +41,18 @@ type clientOrigin struct {
 //	1. the RP issues options with a fresh challenge;
 //	2. the client builds client data (webauthn.create);
 //	3. the authenticator mints an Ed25519 credential and authenticator data;
+//	4. the RP verifies origin, type, challenge, RP ID hash and UV policy, then
+//	   stores the credential.
+//
+// The origin argument lets scenarios inject a mismatched origin. Pass the RP's
+// own origin for the honest path.
+func Register(rp *RelyingParty, va *VirtualAuthenticator, opts RegistrationOptions, origin clientOrigin) (*RegistrationResult, error) {
+	if err := opts.UserVerification.Validate(); err != nil {
+		return nil, err
+	}
+	uv := decideUV(va, opts.UserVerification)
+	if opts.UserVerification == UVRequired && !uv {
+		return nil, errUVUnsupported
+	}
+
+	cred, err := va.makeCredential(rp.ID)
