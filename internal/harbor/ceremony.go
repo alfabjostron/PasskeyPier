@@ -56,3 +56,18 @@ func Register(rp *RelyingParty, va *VirtualAuthenticator, opts RegistrationOptio
 	}
 
 	cred, err := va.makeCredential(rp.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	cd := ClientData{
+		Type:        TypeCreate,
+		Challenge:   opts.Challenge.String(),
+		Origin:      origin.origin,
+		CrossOrigin: origin.crossOrigin,
+	}
+	cdJSON, err := cd.Marshal()
+	if err != nil {
+		return nil, err
+	}
+
