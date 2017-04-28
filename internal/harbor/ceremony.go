@@ -115,3 +115,18 @@ func Authenticate(rp *RelyingParty, va *VirtualAuthenticator, opts Authenticatio
 		return nil, err
 	}
 
+	cred, err := selectCredential(va, rp.ID, opts.AllowCredentialID)
+	if err != nil {
+		return nil, err
+	}
+
+	uv := decideUV(va, opts.UserVerification)
+	if opts.UserVerification == UVRequired && !uv {
+		return nil, errUVUnsupported
+	}
+
+	// The counter increments on each assertion (typical hardware behavior).
+	cred.signCount++
+
+	cd := ClientData{
+		Type:        TypeGet,
