@@ -100,3 +100,18 @@ func Register(rp *RelyingParty, va *VirtualAuthenticator, opts RegistrationOptio
 	return &RegistrationResult{
 		CredentialID:      append([]byte(nil), cred.id...),
 		ClientDataJSON:    cdJSON,
+		AuthenticatorData: adBytes,
+		PublicKey:         append([]byte(nil), cred.pub...),
+		UserVerified:      uv,
+	}, nil
+}
+
+// Authenticate performs a full get ceremony: the authenticator signs
+// authData || clientDataHash with the credential's Ed25519 key and the RP
+// verifies the signature, origin, type, challenge, RP ID hash, UV policy and
+// signature counter monotonicity (WebAuthn L2 sec. 7.2).
+func Authenticate(rp *RelyingParty, va *VirtualAuthenticator, opts AuthenticationOptions, origin clientOrigin) (*AuthenticationResult, error) {
+	if err := opts.UserVerification.Validate(); err != nil {
+		return nil, err
+	}
+
