@@ -130,3 +130,18 @@ func Authenticate(rp *RelyingParty, va *VirtualAuthenticator, opts Authenticatio
 
 	cd := ClientData{
 		Type:        TypeGet,
+		Challenge:   opts.Challenge.String(),
+		Origin:      origin.origin,
+		CrossOrigin: origin.crossOrigin,
+	}
+	cdJSON, err := cd.Marshal()
+	if err != nil {
+		return nil, err
+	}
+	cdHash, err := cd.Hash()
+	if err != nil {
+		return nil, err
+	}
+
+	ad := cred.buildAuthData(uv, false, va.AAGUID)
+	adBytes := ad.Marshal()
