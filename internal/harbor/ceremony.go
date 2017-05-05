@@ -160,3 +160,18 @@ func Authenticate(rp *RelyingParty, va *VirtualAuthenticator, opts Authenticatio
 
 	// RP-side verification.
 	stored, ok := rp.Store[EncodeBase64URL(cred.id)]
+	if !ok {
+		return nil, errors.New("harbor: asserted credential is not registered")
+	}
+	res.UserHandle = append([]byte(nil), stored.UserHandle...)
+
+	if err := verifyClientData(cdJSON, TypeGet, opts.Challenge, rp.Origin); err != nil {
+		return nil, err
+	}
+	if err := verifyRPIDHash(ad, rp.ID); err != nil {
+		return nil, err
+	}
+	if err := verifyUVFlag(ad, opts.UserVerification); err != nil {
+		return nil, err
+	}
+	if !ad.Has(FlagUserPresent) {
