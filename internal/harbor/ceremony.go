@@ -175,3 +175,17 @@ func Authenticate(rp *RelyingParty, va *VirtualAuthenticator, opts Authenticatio
 		return nil, err
 	}
 	if !ad.Has(FlagUserPresent) {
+		return nil, errors.New("harbor: user presence flag not set")
+	}
+	if err := VerifyAssertionSignature(stored.PublicKey, adBytes, cdHash, sig); err != nil {
+		return nil, err
+	}
+	if err := verifyCounter(stored.SignCount, ad.SignCount); err != nil {
+		return nil, err
+	}
+	stored.SignCount = ad.SignCount
+
+	return res, nil
+}
+
+// decideUV resolves whether user verification is performed given the
