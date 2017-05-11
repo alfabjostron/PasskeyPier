@@ -189,3 +189,18 @@ func Authenticate(rp *RelyingParty, va *VirtualAuthenticator, opts Authenticatio
 }
 
 // decideUV resolves whether user verification is performed given the
+// authenticator capability and the requested policy.
+func decideUV(va *VirtualAuthenticator, req UserVerification) bool {
+	switch req {
+	case UVRequired:
+		return va.SupportsUV
+	case UVPreferred:
+		return va.SupportsUV
+	case UVDiscouraged:
+		return false
+	default:
+		return false
+	}
+}
+
+// selectCredential picks a resident credential for the RP, honoring an optional
