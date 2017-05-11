@@ -219,3 +219,18 @@ func selectCredential(va *VirtualAuthenticator, rpID string, allow []byte) (*cre
 		if c.rpID == rpID {
 			return c, nil
 		}
+	}
+	return nil, fmt.Errorf("harbor: no resident credential for RP %q", rpID)
+}
+
+// VerifyAssertionSignature checks an Ed25519 signature over
+// authData || clientDataHash. Exported for use by fixtures and tests.
+func VerifyAssertionSignature(pub, authData, clientDataHash, sig []byte) error {
+	if len(pub) != ed25519.PublicKeySize {
+		return fmt.Errorf("harbor: public key size %d, want %d", len(pub), ed25519.PublicKeySize)
+	}
+	signed := append(append([]byte(nil), authData...), clientDataHash...)
+	if !ed25519.Verify(ed25519.PublicKey(pub), signed, sig) {
+		return errors.New("harbor: assertion signature verification failed")
+	}
+	return nil
