@@ -234,3 +234,18 @@ func VerifyAssertionSignature(pub, authData, clientDataHash, sig []byte) error {
 		return errors.New("harbor: assertion signature verification failed")
 	}
 	return nil
+}
+
+// verifyClientData validates the type, challenge and origin of client data.
+func verifyClientData(cdJSON []byte, want CeremonyType, challenge Challenge, expectOrigin string) error {
+	var cd ClientData
+	if err := decodeStrict(cdJSON, &cd); err != nil {
+		return fmt.Errorf("harbor: decoding client data: %w", err)
+	}
+	if cd.Type != want {
+		return fmt.Errorf("harbor: client data type %q, want %q", cd.Type, want)
+	}
+	got, err := DecodeBase64URL(cd.Challenge)
+	if err != nil {
+		return fmt.Errorf("harbor: decoding client data challenge: %w", err)
+	}
