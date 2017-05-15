@@ -10,3 +10,10 @@ const (
 	UVPreferred   UserVerification = "preferred"
 	UVDiscouraged UserVerification = "discouraged"
 )
+
+// Validate ensures the policy value is one of the recognized enum members.
+func (uv UserVerification) Validate() error {
+	switch uv {
+	case UVRequired, UVPreferred, UVDiscouraged:
+		return nil
+	default:
