@@ -35,3 +35,9 @@ type RelyingParty struct {
 type RegisteredCredential struct {
 	ID            []byte
 	PublicKey     []byte // raw Ed25519 public key (32 bytes)
+	SignCount     uint32
+	RPID          string
+	UserHandle    []byte
+	BackupEligible bool
+}
+
