@@ -23,3 +23,9 @@ func (uv UserVerification) Validate() error {
 
 // RelyingParty holds server-side configuration and the credential store used to
 // validate ceremonies. Origin is the single expected origin; RPID is the
+// relying-party identifier (a registrable domain suffix of the origin host).
+type RelyingParty struct {
+	ID     string // e.g. "harbor.example"
+	Origin string // e.g. "https://harbor.example"
+	// Store maps base64url credential id -> registered public-key record.
+	Store map[string]*RegisteredCredential
