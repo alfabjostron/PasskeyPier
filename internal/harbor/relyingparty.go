@@ -48,3 +48,9 @@ func NewRelyingParty(id, origin string) *RelyingParty {
 		Origin: origin,
 		Store:  make(map[string]*RegisteredCredential),
 	}
+}
+
+// RegistrationOptions are the parameters the RP issues to begin a create
+// ceremony (analogous to PublicKeyCredentialCreationOptions).
+type RegistrationOptions struct {
+	Challenge        Challenge
