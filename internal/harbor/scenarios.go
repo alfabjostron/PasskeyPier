@@ -81,3 +81,17 @@ func DefaultScenarios() []Scenario {
 		return NewRelyingParty(rpID, origin), NewVirtualAuthenticator(uv)
 	}
 
+	// registerHelper performs an honest registration and returns state.
+	registerHelper := func(rp *RelyingParty, va *VirtualAuthenticator, uv UserVerification) (*RegistrationResult, error) {
+		ch, err := NewChallenge(DefaultChallengeLen)
+		if err != nil {
+			return nil, err
+		}
+		return Register(rp, va, RegistrationOptions{
+			Challenge:        ch,
+			UserHandle:       []byte("user-42"),
+			UserVerification: uv,
+		}, Origin(origin))
+	}
+
+	return []Scenario{
