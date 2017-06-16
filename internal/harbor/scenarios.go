@@ -39,3 +39,17 @@ type ScenarioResult struct {
 
 // Scenario is a named, self-contained conformance check.
 type Scenario struct {
+	Name        string
+	Category    string
+	Description string
+	Expectation Expectation
+	// Run executes the scenario and returns nil on RP acceptance or a non-nil
+	// error when the RP rejects the ceremony.
+	Run func() error
+}
+
+// evaluate compares the actual error against the expectation and yields an
+// Outcome plus a human-readable detail string.
+func (s Scenario) evaluate(err error) (Outcome, string) {
+	switch s.Expectation {
+	case ExpectAccept:
