@@ -67,3 +67,17 @@ func (s Scenario) evaluate(err error) (Outcome, string) {
 	}
 }
 
+// DefaultScenarios returns the built-in conformance scenario suite. Each
+// scenario builds its own fresh RP and authenticator so runs are independent.
+func DefaultScenarios() []Scenario {
+	const (
+		rpID     = "harbor.example"
+		origin   = "https://harbor.example"
+		badOrig  = "https://evil.example"
+		otherRP  = "phish.example"
+	)
+
+	newPair := func(uv bool) (*RelyingParty, *VirtualAuthenticator) {
+		return NewRelyingParty(rpID, origin), NewVirtualAuthenticator(uv)
+	}
+
