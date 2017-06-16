@@ -53,3 +53,17 @@ type Scenario struct {
 func (s Scenario) evaluate(err error) (Outcome, string) {
 	switch s.Expectation {
 	case ExpectAccept:
+		if err == nil {
+			return OutcomePass, "ceremony accepted as expected"
+		}
+		return OutcomeFail, fmt.Sprintf("expected acceptance but was rejected: %v", err)
+	case ExpectReject:
+		if err != nil {
+			return OutcomePass, fmt.Sprintf("rejected as expected: %v", err)
+		}
+		return OutcomeFail, "expected rejection but ceremony was accepted"
+	default:
+		return OutcomeFail, fmt.Sprintf("unknown expectation %q", s.Expectation)
+	}
+}
+
