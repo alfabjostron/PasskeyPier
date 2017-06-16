@@ -95,3 +95,18 @@ func DefaultScenarios() []Scenario {
 	}
 
 	return []Scenario{
+		{
+			Name:        "register/happy-path-uv-preferred",
+			Category:    "registration",
+			Description: "Honest registration with a UV-capable authenticator and preferred policy.",
+			Expectation: ExpectAccept,
+			Run: func() error {
+				rp, va := newPair(true)
+				_, err := registerHelper(rp, va, UVPreferred)
+				return err
+			},
+		},
+		{
+			Name:        "register/uv-required-without-uv-support",
+			Category:    "registration",
+			Description: "UV=required against an authenticator that cannot verify the user must be rejected.",
