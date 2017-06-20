@@ -166,3 +166,17 @@ func DefaultScenarios() []Scenario {
 			Expectation: ExpectReject,
 			Run: func() error {
 				rp, va := newPair(true)
+				if _, err := registerHelper(rp, va, UVPreferred); err != nil {
+					return err
+				}
+				fresh, err := NewChallenge(DefaultChallengeLen)
+				if err != nil {
+					return err
+				}
+				stale, err := NewChallenge(DefaultChallengeLen)
+				if err != nil {
+					return err
+				}
+				// The client signs over `fresh` but the RP verifies against `stale`.
+				return authenticateWithChallengeMismatch(rp, va, fresh, stale, origin)
+			},
