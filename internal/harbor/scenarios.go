@@ -180,3 +180,17 @@ func DefaultScenarios() []Scenario {
 				// The client signs over `fresh` but the RP verifies against `stale`.
 				return authenticateWithChallengeMismatch(rp, va, fresh, stale, origin)
 			},
+		},
+		{
+			Name:        "authenticate/uv-required-satisfied",
+			Category:    "policy",
+			Description: "UV=required with a UV-capable authenticator sets the UV flag and passes.",
+			Expectation: ExpectAccept,
+			Run: func() error {
+				rp, va := newPair(true)
+				if _, err := registerHelper(rp, va, UVRequired); err != nil {
+					return err
+				}
+				ch, err := NewChallenge(DefaultChallengeLen)
+				if err != nil {
+					return err
