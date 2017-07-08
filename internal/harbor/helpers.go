@@ -17,3 +17,9 @@ func authenticateWithChallengeMismatch(rp *RelyingParty, va *VirtualAuthenticato
 	if err != nil {
 		return err
 	}
+	cred.signCount++
+
+	cd := ClientData{
+		Type:      TypeGet,
+		Challenge: signChallenge.String(),
+		Origin:    origin,
