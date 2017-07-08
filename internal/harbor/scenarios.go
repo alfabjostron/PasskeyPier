@@ -222,3 +222,17 @@ func DefaultScenarios() []Scenario {
 				_, err = Authenticate(rp, va, AuthenticationOptions{
 					Challenge:        ch,
 					UserVerification: UVPreferred,
+				}, Origin(origin))
+				return err
+			},
+		},
+		{
+			Name:        "authenticate/tampered-signature",
+			Category:    "security",
+			Description: "Flipping a byte of the assertion signature must fail Ed25519 verification.",
+			Expectation: ExpectReject,
+			Run: func() error {
+				rp, va := newPair(true)
+				reg, err := registerHelper(rp, va, UVPreferred)
+				if err != nil {
+					return err
