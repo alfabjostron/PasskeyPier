@@ -208,3 +208,17 @@ func DefaultScenarios() []Scenario {
 			Description: "A signature counter that fails to advance signals a cloned authenticator and must be rejected.",
 			Expectation: ExpectReject,
 			Run: func() error {
+				rp, va := newPair(true)
+				reg, err := registerHelper(rp, va, UVPreferred)
+				if err != nil {
+					return err
+				}
+				// Force the stored counter high so the next assertion regresses.
+				rp.Store[EncodeBase64URL(reg.CredentialID)].SignCount = 99
+				ch, err := NewChallenge(DefaultChallengeLen)
+				if err != nil {
+					return err
+				}
+				_, err = Authenticate(rp, va, AuthenticationOptions{
+					Challenge:        ch,
+					UserVerification: UVPreferred,
