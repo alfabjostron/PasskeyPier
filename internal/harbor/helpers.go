@@ -36,3 +36,9 @@ func authenticateWithChallengeMismatch(rp *RelyingParty, va *VirtualAuthenticato
 // and runs the RP signature verification, which must fail.
 func tamperedSignatureCheck(rp *RelyingParty, reg *RegistrationResult) error {
 	stored, ok := rp.Store[EncodeBase64URL(reg.CredentialID)]
+	if !ok {
+		return errors.New("harbor: credential missing from store")
+	}
+	// Reconstruct a signable payload from the registration authenticator data
+	// plus a fresh client-data hash.
+	cd := ClientData{Type: TypeGet, Challenge: "AAAAAAAAAAAAAAAAAAAAAA", Origin: rp.Origin}
