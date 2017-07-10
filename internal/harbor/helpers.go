@@ -23,3 +23,10 @@ func authenticateWithChallengeMismatch(rp *RelyingParty, va *VirtualAuthenticato
 		Type:      TypeGet,
 		Challenge: signChallenge.String(),
 		Origin:    origin,
+	}
+	cdJSON, err := cd.Marshal()
+	if err != nil {
+		return err
+	}
+	// The RP verifies the client data against the challenge it actually issued.
+	return verifyClientData(cdJSON, TypeGet, verifyChallenge, rp.Origin)
