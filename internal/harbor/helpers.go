@@ -30,3 +30,9 @@ func authenticateWithChallengeMismatch(rp *RelyingParty, va *VirtualAuthenticato
 	}
 	// The RP verifies the client data against the challenge it actually issued.
 	return verifyClientData(cdJSON, TypeGet, verifyChallenge, rp.Origin)
+}
+
+// tamperedSignatureCheck produces a valid assertion, flips a signature byte,
+// and runs the RP signature verification, which must fail.
+func tamperedSignatureCheck(rp *RelyingParty, reg *RegistrationResult) error {
+	stored, ok := rp.Store[EncodeBase64URL(reg.CredentialID)]
