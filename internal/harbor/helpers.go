@@ -42,3 +42,9 @@ func tamperedSignatureCheck(rp *RelyingParty, reg *RegistrationResult) error {
 	// Reconstruct a signable payload from the registration authenticator data
 	// plus a fresh client-data hash.
 	cd := ClientData{Type: TypeGet, Challenge: "AAAAAAAAAAAAAAAAAAAAAA", Origin: rp.Origin}
+	cdHash, err := cd.Hash()
+	if err != nil {
+		return err
+	}
+	ad, err := ParseAuthenticatorData(reg.AuthenticatorData)
+	if err != nil {
