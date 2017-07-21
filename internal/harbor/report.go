@@ -29,3 +29,13 @@ type ReportSummary struct {
 	Passed    int  `json:"passed"`
 	Failed    int  `json:"failed"`
 	AllPassed bool `json:"all_passed"`
+}
+
+// CategoryTotals aggregates results per scenario category.
+type CategoryTotals struct {
+	Category string `json:"category"`
+	Passed   int    `json:"passed"`
+	Failed   int    `json:"failed"`
+}
+
+// BuildReport turns raw scenario results into a structured report.
