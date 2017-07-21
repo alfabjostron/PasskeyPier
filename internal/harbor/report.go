@@ -19,3 +19,13 @@ type Report struct {
 	Tool        string           `json:"tool"`
 	GeneratedAt string           `json:"generated_at"`
 	Summary     ReportSummary    `json:"summary"`
+	Categories  []CategoryTotals `json:"categories"`
+	Results     []ScenarioResult `json:"results"`
+}
+
+// ReportSummary aggregates high-level pass/fail counts.
+type ReportSummary struct {
+	Total     int  `json:"total"`
+	Passed    int  `json:"passed"`
+	Failed    int  `json:"failed"`
+	AllPassed bool `json:"all_passed"`
