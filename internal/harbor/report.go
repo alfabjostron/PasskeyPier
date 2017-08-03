@@ -48,3 +48,13 @@ func BuildReport(results []ScenarioResult) Report {
 		} else {
 			summary.Failed++
 		}
+		c, ok := catMap[r.Category]
+		if !ok {
+			c = &CategoryTotals{Category: r.Category}
+			catMap[r.Category] = c
+		}
+		if r.Outcome == OutcomePass {
+			c.Passed++
+		} else {
+			c.Failed++
+		}
