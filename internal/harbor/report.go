@@ -87,3 +87,13 @@ func (r Report) WriteJSON(w io.Writer) error {
 // WriteText writes a human-readable text report suitable for a terminal.
 func (r Report) WriteText(w io.Writer) error {
 	var b strings.Builder
+	b.WriteString("passkeypier conformance report\n")
+	b.WriteString("==============================\n")
+	fmt.Fprintf(&b, "generated: %s\n", r.GeneratedAt)
+	fmt.Fprintf(&b, "schema:    %s\n\n", r.Schema)
+
+	for _, res := range r.Results {
+		mark := "PASS"
+		if res.Outcome != OutcomePass {
+			mark = "FAIL"
+		}
