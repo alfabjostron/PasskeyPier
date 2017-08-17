@@ -78,3 +78,12 @@ func BuildReport(results []ScenarioResult) Report {
 }
 
 // WriteJSON writes the report as indented JSON.
+func (r Report) WriteJSON(w io.Writer) error {
+	enc := json.NewEncoder(w)
+	enc.SetIndent("", "  ")
+	return enc.Encode(r)
+}
+
+// WriteText writes a human-readable text report suitable for a terminal.
+func (r Report) WriteText(w io.Writer) error {
+	var b strings.Builder
