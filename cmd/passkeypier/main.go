@@ -13,3 +13,17 @@ import (
 
 	"github.com/alfabjostron/passkeypier/internal/harbor"
 )
+
+const usage = `passkeypier - virtual Passkey/WebAuthn conformance lab
+
+usage:
+  passkeypier run     [-format text|json] [-out FILE]   run the conformance suite
+  passkeypier demo    [-uv required|preferred|discouraged]  run one register+auth ceremony
+  passkeypier list                                       list scenarios
+  passkeypier version                                    print version
+
+passkeypier is an educational tool and is not FIDO-certified.
+`
+
+const version = "0.1.0"
+
