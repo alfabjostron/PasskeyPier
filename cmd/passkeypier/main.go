@@ -27,3 +27,18 @@ passkeypier is an educational tool and is not FIDO-certified.
 
 const version = "0.1.0"
 
+func main() {
+	if len(os.Args) < 2 {
+		fmt.Fprint(os.Stderr, usage)
+		os.Exit(2)
+	}
+	switch os.Args[1] {
+	case "run":
+		os.Exit(cmdRun(os.Args[2:]))
+	case "demo":
+		os.Exit(cmdDemo(os.Args[2:]))
+	case "list":
+		os.Exit(cmdList())
+	case "version":
+		fmt.Printf("passkeypier %s\n", version)
+	case "-h", "--help", "help":
