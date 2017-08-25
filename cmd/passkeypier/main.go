@@ -70,3 +70,17 @@ func cmdRun(args []string) int {
 	}
 
 	var err error
+	switch *format {
+	case "json":
+		err = report.WriteJSON(w)
+	case "text":
+		err = report.WriteText(w)
+	default:
+		fmt.Fprintf(os.Stderr, "passkeypier: unknown format %q\n", *format)
+		return 2
+	}
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "passkeypier: %v\n", err)
+		return 1
+	}
+
