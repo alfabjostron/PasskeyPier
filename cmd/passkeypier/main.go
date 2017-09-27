@@ -113,3 +113,17 @@ func cmdDemo(args []string) int {
 		fmt.Fprintf(os.Stderr, "passkeypier: %v\n", err)
 		return 1
 	}
+	reg, err := harbor.Register(rp, va, harbor.RegistrationOptions{
+		Challenge:        regCh,
+		UserHandle:       []byte("mariner-1"),
+		UserVerification: uv,
+	}, harbor.Origin(origin))
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "passkeypier: registration failed: %v\n", err)
+		return 1
+	}
+	fmt.Printf("registration OK\n")
+	fmt.Printf("  credential id: %s\n", harbor.EncodeBase64URL(reg.CredentialID))
+	fmt.Printf("  public key:    %s\n", harbor.EncodeBase64URL(reg.PublicKey))
+	fmt.Printf("  user verified: %v\n", reg.UserVerified)
+
