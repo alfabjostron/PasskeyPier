@@ -5,3 +5,12 @@
 import { parseReportText, ReportError } from "./report.js";
 import { renderReport, renderError } from "./render.js";
 
+function getTarget(): HTMLElement {
+  const t = document.getElementById("report");
+  if (!t) throw new Error("missing #report element");
+  return t;
+}
+
+function handleText(text: string): void {
+  const target = getTarget();
+  try {
