@@ -23,3 +23,12 @@ function handleText(text: string): void {
       renderError(target, `unexpected error: ${(e as Error).message}`);
     }
   }
+}
+
+function wireFileInput(): void {
+  const input = document.getElementById("file") as HTMLInputElement | null;
+  if (!input) return;
+  input.addEventListener("change", () => {
+    const file = input.files?.[0];
+    if (!file) return;
+    file.text().then(handleText);
