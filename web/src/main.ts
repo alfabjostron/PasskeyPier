@@ -14,3 +14,12 @@ function getTarget(): HTMLElement {
 function handleText(text: string): void {
   const target = getTarget();
   try {
+    const report = parseReportText(text);
+    renderReport(target, report);
+  } catch (e) {
+    if (e instanceof ReportError) {
+      renderError(target, e.message);
+    } else {
+      renderError(target, `unexpected error: ${(e as Error).message}`);
+    }
+  }
