@@ -50,3 +50,12 @@ function wireDrop(): void {
     if (file) file.text().then(handleText);
   });
 }
+
+function wireSample(): void {
+  const btn = document.getElementById("load-sample");
+  if (!btn) return;
+  const script = document.getElementById("sample-report");
+  btn.addEventListener("click", () => {
+    if (script && script.textContent) {
+      handleText(script.textContent);
+    } else {
