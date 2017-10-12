@@ -41,3 +41,12 @@ function wireDrop(): void {
   zone.addEventListener("dragover", (e) => {
     e.preventDefault();
     zone.classList.add("drag");
+  });
+  zone.addEventListener("dragleave", () => zone.classList.remove("drag"));
+  zone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    zone.classList.remove("drag");
+    const file = e.dataTransfer?.files?.[0];
+    if (file) file.text().then(handleText);
+  });
+}
