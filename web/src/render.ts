@@ -9,3 +9,13 @@ function el<K extends keyof HTMLElementTagNameMap>(
   text?: string,
 ): HTMLElementTagNameMap[K] {
   const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+
+function formatDuration(ns: number): string {
+  if (ns < 1000) return `${ns} ns`;
+  if (ns < 1_000_000) return `${(ns / 1000).toFixed(1)} µs`;
+  return `${(ns / 1_000_000).toFixed(2)} ms`;
+}
