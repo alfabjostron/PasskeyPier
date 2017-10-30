@@ -39,3 +39,13 @@ function renderSummary(report: Report): HTMLElement {
     el(
       "span",
       "meta-item",
+      `${report.summary.passed}/${report.summary.total} passed`,
+    ),
+  );
+  wrap.appendChild(meta);
+  return wrap;
+}
+
+function renderCategories(report: Report): HTMLElement {
+  const wrap = el("div", "categories");
+  wrap.appendChild(el("h2", undefined, "By category"));
