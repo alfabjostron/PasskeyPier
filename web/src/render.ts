@@ -59,3 +59,13 @@ function renderCategories(report: Report): HTMLElement {
     list.appendChild(card);
   }
   wrap.appendChild(list);
+  return wrap;
+}
+
+function renderScenario(r: ScenarioResult): HTMLElement {
+  const row = el("details", r.outcome === "pass" ? "scenario pass" : "scenario fail");
+  const summary = el("summary");
+  const badge = el(
+    "span",
+    r.outcome === "pass" ? "badge badge-pass" : "badge badge-fail",
+    r.outcome.toUpperCase(),
