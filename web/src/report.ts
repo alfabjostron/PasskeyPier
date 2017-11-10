@@ -30,3 +30,13 @@ function requireBool(o: Record<string, unknown>, key: string): boolean {
   const v = o[key];
   if (typeof v !== "boolean") {
     throw new ReportError(`field "${key}" must be a boolean`);
+  }
+  return v;
+}
+
+function parseScenario(v: unknown): ScenarioResult {
+  if (!isObject(v)) {
+    throw new ReportError("scenario result must be an object");
+  }
+  const outcome = requireString(v, "outcome");
+  if (outcome !== "pass" && outcome !== "fail") {
