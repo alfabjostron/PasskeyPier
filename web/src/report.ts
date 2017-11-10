@@ -40,3 +40,14 @@ function parseScenario(v: unknown): ScenarioResult {
   }
   const outcome = requireString(v, "outcome");
   if (outcome !== "pass" && outcome !== "fail") {
+    throw new ReportError(`invalid outcome "${outcome}"`);
+  }
+  const expectation = requireString(v, "expectation");
+  if (expectation !== "accept" && expectation !== "reject") {
+    throw new ReportError(`invalid expectation "${expectation}"`);
+  }
+  return {
+    name: requireString(v, "name"),
+    category: requireString(v, "category"),
+    description: requireString(v, "description"),
+    expectation,
