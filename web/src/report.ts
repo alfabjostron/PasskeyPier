@@ -9,3 +9,13 @@ export class ReportError extends Error {}
 function isObject(v: unknown): v is Record<string, unknown> {
   return typeof v === "object" && v !== null && !Array.isArray(v);
 }
+
+function requireString(o: Record<string, unknown>, key: string): string {
+  const v = o[key];
+  if (typeof v !== "string") {
+    throw new ReportError(`field "${key}" must be a string`);
+  }
+  return v;
+}
+
+function requireNumber(o: Record<string, unknown>, key: string): number {
