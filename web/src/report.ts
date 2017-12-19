@@ -61,3 +61,14 @@ function parseScenario(v: unknown): ScenarioResult {
 export function parseReport(raw: unknown): Report {
   if (!isObject(raw)) {
     throw new ReportError("report must be a JSON object");
+  }
+  const schema = requireString(raw, "schema");
+  if (schema !== EXPECTED_SCHEMA) {
+    throw new ReportError(
+      `unsupported schema "${schema}", expected "${EXPECTED_SCHEMA}"`,
+    );
+  }
+  const summaryRaw = raw["summary"];
+  if (!isObject(summaryRaw)) {
+    throw new ReportError('field "summary" must be an object');
+  }
