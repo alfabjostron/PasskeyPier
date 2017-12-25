@@ -82,3 +82,14 @@ export function parseReport(raw: unknown): Report {
   }
 
   return {
+    schema,
+    tool: requireString(raw, "tool"),
+    generated_at: requireString(raw, "generated_at"),
+    summary: {
+      total: requireNumber(summaryRaw, "total"),
+      passed: requireNumber(summaryRaw, "passed"),
+      failed: requireNumber(summaryRaw, "failed"),
+      all_passed: requireBool(summaryRaw, "all_passed"),
+    },
+    categories: categoriesRaw.map((c) => {
+      if (!isObject(c)) throw new ReportError("category must be an object");
