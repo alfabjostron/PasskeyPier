@@ -21,3 +21,10 @@ export interface ReportSummary {
   failed: number;
   all_passed: boolean;
 }
+
+export interface CategoryTotals {
+  category: string;
+  passed: number;
+  failed: number;
+}
+
