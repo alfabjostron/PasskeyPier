@@ -15,3 +15,9 @@ export interface ScenarioResult {
   duration_ns: number;
 }
 
+export interface ReportSummary {
+  total: number;
+  passed: number;
+  failed: number;
+  all_passed: boolean;
+}
