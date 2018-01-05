@@ -8,3 +8,10 @@ export type Expectation = "accept" | "reject";
 export interface ScenarioResult {
   name: string;
   category: string;
+  description: string;
+  expectation: Expectation;
+  outcome: Outcome;
+  detail: string;
+  duration_ns: number;
+}
+
