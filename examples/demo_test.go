@@ -27,3 +27,11 @@ func Example_registerAndAuthenticate() {
 		panic(err)
 	}
 	reg, err := harbor.Register(rp, va, harbor.RegistrationOptions{
+		Challenge:        regChallenge,
+		UserHandle:       []byte("mariner-1"),
+		UserVerification: harbor.UVPreferred,
+	}, harbor.Origin(origin))
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("registered=%v userVerified=%v\n", rp.Store[harbor.EncodeBase64URL(reg.CredentialID)] != nil, reg.UserVerified)
