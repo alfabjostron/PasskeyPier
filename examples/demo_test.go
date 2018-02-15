@@ -43,3 +43,10 @@ func Example_registerAndAuthenticate() {
 	}
 	auth, err := harbor.Authenticate(rp, va, harbor.AuthenticationOptions{
 		Challenge:        authChallenge,
+		UserVerification: harbor.UVPreferred,
+	}, harbor.Origin(origin))
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("authenticated userHandle=%s sigLen=%d\n", string(auth.UserHandle), len(auth.Signature))
+
