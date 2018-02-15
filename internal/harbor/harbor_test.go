@@ -61,3 +61,20 @@ func TestChallengeUniqueness(t *testing.T) {
 
 func TestBase64URLRoundTrip(t *testing.T) {
 	raw := []byte{0x00, 0xff, 0x10, 0x7f, 0x80, 0xab}
+	enc := EncodeBase64URL(raw)
+	if strings.ContainsAny(enc, "+/=") {
+		t.Fatalf("encoding %q contains non-url-safe or padding characters", enc)
+	}
+	back, err := DecodeBase64URL(enc)
+	if err != nil {
+		t.Fatalf("decode: %v", err)
+	}
+	if !bytes.Equal(raw, back) {
+		t.Fatalf("round trip mismatch: got %x want %x", back, raw)
+	}
+}
+
+func TestAuthenticatorDataMarshalParse(t *testing.T) {
+	ad := AuthenticatorData{
+		RPIDHash:  RPIDHash(testRPID),
+		Flags:     FlagUserPresent | FlagUserVerified,
