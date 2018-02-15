@@ -43,3 +43,21 @@ func TestNewChallengeLength(t *testing.T) {
 		t.Fatalf("challenge length = %d, want %d", len(ch), DefaultChallengeLen)
 	}
 	if _, err := NewChallenge(8); err == nil {
+		t.Fatal("expected error for short challenge, got nil")
+	}
+}
+
+func TestChallengeUniqueness(t *testing.T) {
+	seen := map[string]bool{}
+	for i := 0; i < 256; i++ {
+		ch := mustChallenge(t)
+		s := ch.String()
+		if seen[s] {
+			t.Fatalf("duplicate challenge at iteration %d", i)
+		}
+		seen[s] = true
+	}
+}
+
+func TestBase64URLRoundTrip(t *testing.T) {
+	raw := []byte{0x00, 0xff, 0x10, 0x7f, 0x80, 0xab}
