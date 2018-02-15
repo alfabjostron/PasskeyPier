@@ -96,3 +96,20 @@ func TestAuthenticatorDataMarshalParse(t *testing.T) {
 		t.Fatal("expected UV flag set")
 	}
 	if !bytes.Equal(parsed.Trailing, []byte{1, 2, 3}) {
+		t.Fatalf("trailing = %x, want 010203", parsed.Trailing)
+	}
+	if _, err := ParseAuthenticatorData(raw[:10]); err == nil {
+		t.Fatal("expected error parsing truncated data")
+	}
+}
+
+func TestClientDataHashDeterministic(t *testing.T) {
+	cd := ClientData{Type: TypeGet, Challenge: "abc", Origin: testOrigin}
+	h1, err := cd.Hash()
+	if err != nil {
+		t.Fatalf("hash: %v", err)
+	}
+	h2, _ := cd.Hash()
+	if !bytes.Equal(h1, h2) {
+		t.Fatal("client data hash not deterministic")
+	}
