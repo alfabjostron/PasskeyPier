@@ -78,3 +78,21 @@ func TestAuthenticatorDataMarshalParse(t *testing.T) {
 	ad := AuthenticatorData{
 		RPIDHash:  RPIDHash(testRPID),
 		Flags:     FlagUserPresent | FlagUserVerified,
+		SignCount: 7,
+		Trailing:  []byte{1, 2, 3},
+	}
+	raw := ad.Marshal()
+	if len(raw) != 37+3 {
+		t.Fatalf("marshaled length = %d, want %d", len(raw), 40)
+	}
+	parsed, err := ParseAuthenticatorData(raw)
+	if err != nil {
+		t.Fatalf("parse: %v", err)
+	}
+	if parsed.SignCount != 7 {
+		t.Fatalf("signCount = %d, want 7", parsed.SignCount)
+	}
+	if !parsed.Has(FlagUserVerified) {
+		t.Fatal("expected UV flag set")
+	}
+	if !bytes.Equal(parsed.Trailing, []byte{1, 2, 3}) {
