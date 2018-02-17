@@ -113,3 +113,21 @@ func TestClientDataHashDeterministic(t *testing.T) {
 	if !bytes.Equal(h1, h2) {
 		t.Fatal("client data hash not deterministic")
 	}
+	if len(h1) != 32 {
+		t.Fatalf("hash length = %d, want 32", len(h1))
+	}
+}
+
+func TestRegisterAndAuthenticateHappyPath(t *testing.T) {
+	rp := NewRelyingParty(testRPID, testOrigin)
+	va := NewVirtualAuthenticator(true)
+
+	reg, err := Register(rp, va, RegistrationOptions{
+		Challenge:        mustChallenge(t),
+		UserHandle:       []byte("user-1"),
+		UserVerification: UVPreferred,
+	}, Origin(testOrigin))
+	if err != nil {
+		t.Fatalf("Register: %v", err)
+	}
+	if !reg.UserVerified {
