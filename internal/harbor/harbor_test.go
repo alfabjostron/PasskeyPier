@@ -184,3 +184,20 @@ func TestWrongOriginRejected(t *testing.T) {
 	if !strings.Contains(err.Error(), "origin") {
 		t.Fatalf("expected origin error, got: %v", err)
 	}
+}
+
+func TestCounterRegressionRejected(t *testing.T) {
+	if err := verifyCounter(10, 5); err == nil {
+		t.Fatal("expected counter regression rejection")
+	}
+	if err := verifyCounter(0, 0); err != nil {
+		t.Fatalf("counter 0->0 should be tolerated: %v", err)
+	}
+	if err := verifyCounter(1, 2); err != nil {
+		t.Fatalf("counter 1->2 should pass: %v", err)
+	}
+}
+
+func TestSignatureVerificationFailsOnTamper(t *testing.T) {
+	rp := NewRelyingParty(testRPID, testOrigin)
+	va := NewVirtualAuthenticator(true)
