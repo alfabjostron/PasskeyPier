@@ -149,3 +149,20 @@ func TestRegisterAndAuthenticateHappyPath(t *testing.T) {
 	}
 	// The stored counter must have advanced.
 	if rp.Store[EncodeBase64URL(reg.CredentialID)].SignCount == 0 {
+		t.Fatal("expected signature counter to advance")
+	}
+}
+
+func TestUVRequiredWithoutSupportRejected(t *testing.T) {
+	rp := NewRelyingParty(testRPID, testOrigin)
+	va := NewVirtualAuthenticator(false) // no UV capability
+	_, err := Register(rp, va, RegistrationOptions{
+		Challenge:        mustChallenge(t),
+		UserVerification: UVRequired,
+	}, Origin(testOrigin))
+	if err == nil {
+		t.Fatal("expected rejection when UV required but unsupported")
+	}
+}
+
+func TestWrongOriginRejected(t *testing.T) {
