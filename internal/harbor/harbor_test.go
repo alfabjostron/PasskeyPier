@@ -131,3 +131,21 @@ func TestRegisterAndAuthenticateHappyPath(t *testing.T) {
 		t.Fatalf("Register: %v", err)
 	}
 	if !reg.UserVerified {
+		t.Fatal("expected user verified on UV-capable authenticator")
+	}
+	if rp.Store[EncodeBase64URL(reg.CredentialID)] == nil {
+		t.Fatal("credential not stored by RP")
+	}
+
+	auth, err := Authenticate(rp, va, AuthenticationOptions{
+		Challenge:        mustChallenge(t),
+		UserVerification: UVPreferred,
+	}, Origin(testOrigin))
+	if err != nil {
+		t.Fatalf("Authenticate: %v", err)
+	}
+	if string(auth.UserHandle) != "user-1" {
+		t.Fatalf("user handle = %q, want user-1", auth.UserHandle)
+	}
+	// The stored counter must have advanced.
+	if rp.Store[EncodeBase64URL(reg.CredentialID)].SignCount == 0 {
