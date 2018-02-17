@@ -166,3 +166,21 @@ func TestUVRequiredWithoutSupportRejected(t *testing.T) {
 }
 
 func TestWrongOriginRejected(t *testing.T) {
+	rp := NewRelyingParty(testRPID, testOrigin)
+	va := NewVirtualAuthenticator(true)
+	if _, err := Register(rp, va, RegistrationOptions{
+		Challenge:        mustChallenge(t),
+		UserVerification: UVPreferred,
+	}, Origin(testOrigin)); err != nil {
+		t.Fatalf("Register: %v", err)
+	}
+	_, err := Authenticate(rp, va, AuthenticationOptions{
+		Challenge:        mustChallenge(t),
+		UserVerification: UVPreferred,
+	}, CrossOrigin("https://evil.example"))
+	if err == nil {
+		t.Fatal("expected origin mismatch rejection")
+	}
+	if !strings.Contains(err.Error(), "origin") {
+		t.Fatalf("expected origin error, got: %v", err)
+	}
