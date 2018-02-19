@@ -219,3 +219,21 @@ func TestSignatureVerificationFailsOnTamper(t *testing.T) {
 	// Flip a signature byte.
 	tampered := append([]byte(nil), auth.Signature...)
 	tampered[0] ^= 0xff
+	if err := VerifyAssertionSignature(stored.PublicKey, auth.AuthenticatorData, cdHash, tampered); err == nil {
+		t.Fatal("expected tampered signature to fail verification")
+	}
+	// The untampered signature must verify.
+	if err := VerifyAssertionSignature(stored.PublicKey, auth.AuthenticatorData, cdHash, auth.Signature); err != nil {
+		t.Fatalf("valid signature failed verification: %v", err)
+	}
+}
+
+func TestUserVerificationValidate(t *testing.T) {
+	for _, uv := range []UserVerification{UVRequired, UVPreferred, UVDiscouraged} {
+		if err := uv.Validate(); err != nil {
+			t.Fatalf("%q should be valid: %v", uv, err)
+		}
+	}
+	if err := UserVerification("bogus").Validate(); err == nil {
+		t.Fatal("expected invalid UV to error")
+	}
