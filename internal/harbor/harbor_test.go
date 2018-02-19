@@ -201,3 +201,21 @@ func TestCounterRegressionRejected(t *testing.T) {
 func TestSignatureVerificationFailsOnTamper(t *testing.T) {
 	rp := NewRelyingParty(testRPID, testOrigin)
 	va := NewVirtualAuthenticator(true)
+	if _, err := Register(rp, va, RegistrationOptions{
+		Challenge:        mustChallenge(t),
+		UserVerification: UVPreferred,
+	}, Origin(testOrigin)); err != nil {
+		t.Fatalf("Register: %v", err)
+	}
+	auth, err := Authenticate(rp, va, AuthenticationOptions{
+		Challenge:        mustChallenge(t),
+		UserVerification: UVPreferred,
+	}, Origin(testOrigin))
+	if err != nil {
+		t.Fatalf("Authenticate: %v", err)
+	}
+	stored := rp.Store[EncodeBase64URL(auth.CredentialID)]
+	cdHash := sha256Of(t, auth.ClientDataJSON)
+	// Flip a signature byte.
+	tampered := append([]byte(nil), auth.Signature...)
+	tampered[0] ^= 0xff
