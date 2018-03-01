@@ -29,3 +29,17 @@ and no network.
 ### Explicit non-goals
 
 passkeypier is **not** a FIDO-certified implementation and makes no
+certification claims. The following are intentionally out of scope:
+
+- **Attestation statement verification.** No `packed`, `tpm`, `android-key`,
+  `android-safetynet`, `fido-u2f`, or `apple` attestation formats are parsed or
+  trusted. The lab treats registration attestation as `none`-equivalent.
+- **CBOR / COSE_Key parsing.** The attested credential public key is modeled as
+  the raw 32-byte Ed25519 key rather than a full COSE_Key CBOR map. Signature
+  verification uses the stored key object directly.
+- **Additional COSE algorithms.** Only Ed25519 is implemented. ES256 (`-7`) and
+  RS256 (`-257`) are not.
+- **Transport / CTAP wire framing, extensions, `largeBlob`, `hmac-secret`, and
+  enterprise attestation.**
+- **RP ID derivation rules** beyond an exact-match hash check (no registrable
+  domain suffix walking).
