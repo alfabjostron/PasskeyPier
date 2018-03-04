@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 320" role="img"
+     aria-labelledby="ct cd" width="700" height="320">
+  <title id="ct">passkeypier ceremony data flow</title>
+  <desc id="cd">Data flow between the relying party and the virtual authenticator.
+    The relying party issues a random challenge, the authenticator returns
+    authenticator data plus an Ed25519 signature over authData and the client
