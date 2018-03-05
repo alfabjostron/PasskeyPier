@@ -19,3 +19,10 @@
     <text x="126" y="212" text-anchor="middle" fill="#cfe0ee" font-family="monospace" font-size="11">stores public key</text>
   </g>
 
+  <!-- authenticator -->
+  <g>
+    <rect x="484" y="80" width="180" height="150" rx="8" fill="#163049" stroke="#2e5a80" stroke-width="2"/>
+    <text x="574" y="112" text-anchor="middle" fill="#e8eff5" font-family="monospace" font-size="16">Authenticator</text>
+    <text x="574" y="134" text-anchor="middle" fill="#89a4bb" font-family="monospace" font-size="11">resident credential</text>
+    <line x1="508" y1="148" x2="640" y2="148" stroke="#2e5a80"/>
+    <text x="574" y="172" text-anchor="middle" fill="#cfe0ee" font-family="monospace" font-size="11">holds Ed25519 key</text>
