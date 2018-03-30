@@ -23,3 +23,13 @@ jobs:
           go mod tidy
           git diff --exit-code go.mod
       - name: Vet
+        run: go vet ./...
+      - name: Build
+        run: go build ./...
+      - name: Test
+        run: go test -cover ./...
+      - name: Smoke run
+        run: go run ./cmd/passkeypier run -format json -out report.json && test -s report.json
+
+  web:
+    name: TypeScript lab
