@@ -43,3 +43,15 @@
         <strong>not</strong> FIDO-certified and performs no attestation trust
         verification.
       </p>
+    </footer>
+
+    <!--
+      A working sample report is embedded so the page functions with zero
+      network access. To refresh it after changing scenarios, run:
+        passkeypier run -format json -out web/sample-report.json
+      and paste the file contents between the <script> tags below.
+    -->
+    <script type="application/json" id="sample-report">
+{
+  "schema": "passkeypier/report/v1",
+  "tool": "passkeypier",
