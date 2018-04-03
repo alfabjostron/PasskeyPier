@@ -1,0 +1,24 @@
+:root {
+  --bg: #0b1a2b;
+  --panel: #12263a;
+  --panel-2: #163049;
+  --ink: #e7f0f7;
+  --muted: #9db4c7;
+  --beam: #ffd166;
+  --pass: #3ddc97;
+  --fail: #ff6b6b;
+  --line: #234a68;
+  --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(180deg, #071320 0%, var(--bg) 100%);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+}
