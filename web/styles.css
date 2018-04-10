@@ -78,3 +78,32 @@ main {
 .btn-ghost {
   background: transparent;
   color: var(--ink);
+  border: 1px solid var(--line);
+}
+
+.report {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.hint,
+.sc-desc,
+.sc-detail {
+  color: var(--muted);
+}
+
+.banner {
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.banner-pass {
+  background: rgba(61, 220, 151, 0.15);
+  color: var(--pass);
+  border: 1px solid var(--pass);
+}
