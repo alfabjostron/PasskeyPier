@@ -50,3 +50,31 @@ main {
 }
 
 .drop {
+  border: 2px dashed var(--line);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  background: var(--panel);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.drop.drag {
+  border-color: var(--beam);
+  background: var(--panel-2);
+}
+
+.btn {
+  display: inline-block;
+  cursor: pointer;
+  background: var(--beam);
+  color: #1b1300;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  margin: 0.25rem;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink);
