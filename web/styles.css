@@ -135,3 +135,31 @@ main {
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 0.75rem;
+}
+
+.cat-card.bad {
+  border-color: var(--fail);
+}
+
+.cat-name {
+  font-weight: 600;
+}
+
+.cat-counts {
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+}
+
+.results h2,
+.categories h2 {
+  margin: 1.5rem 0 0.75rem;
+  font-size: 1.05rem;
+}
+
+.scenario {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  background: var(--panel-2);
+}
