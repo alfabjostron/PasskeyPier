@@ -8,3 +8,4 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Go standard-library core (`internal/harbor`) modeling passkey ceremonies:
