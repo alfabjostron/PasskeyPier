@@ -16,3 +16,4 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
     hashing.
   - Authenticator data marshaling/parsing with UP/UV/BE/BS/AT/ED flag handling
     and a big-endian signature counter.
+  - Virtual authenticator holding Ed25519 discoverable credentials with a
