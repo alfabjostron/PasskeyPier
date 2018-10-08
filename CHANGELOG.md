@@ -18,3 +18,4 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
     and a big-endian signature counter.
   - Virtual authenticator holding Ed25519 discoverable credentials with a
     per-credential counter and configurable user-verification capability.
+  - Relying-party verification: origin, ceremony type, challenge equality,
