@@ -19,3 +19,4 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - Virtual authenticator holding Ed25519 discoverable credentials with a
     per-credential counter and configurable user-verification capability.
   - Relying-party verification: origin, ceremony type, challenge equality,
+    RP ID hash, user-verification policy, user-presence, Ed25519 assertion
