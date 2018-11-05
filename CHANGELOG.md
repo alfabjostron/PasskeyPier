@@ -26,3 +26,4 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Conformance report engine emitting JSON (schema `passkeypier/report/v1`) and
   human-readable text.
 - `passkeypier` CLI with `run`, `demo`, `list` and `version` subcommands.
+- Focused unit tests and runnable Go examples.
