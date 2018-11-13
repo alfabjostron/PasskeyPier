@@ -32,3 +32,4 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Documentation: themed README, `docs/SPEC.md`, two original animated SVGs.
 - Makefile, MIT license, `.gitignore`, and GitHub Actions CI (Go + TypeScript).
 
+### Notes
