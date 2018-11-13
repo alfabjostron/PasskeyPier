@@ -33,3 +33,4 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Makefile, MIT license, `.gitignore`, and GitHub Actions CI (Go + TypeScript).
 
 ### Notes
+
