@@ -30,3 +30,4 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Dependency-light TypeScript browser lab (`web/`) that validates and renders
   reports, fully offline (no remote assets, embedded sample report).
 - Documentation: themed README, `docs/SPEC.md`, two original animated SVGs.
+- Makefile, MIT license, `.gitignore`, and GitHub Actions CI (Go + TypeScript).
