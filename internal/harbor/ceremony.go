@@ -249,3 +249,41 @@ func verifyClientData(cdJSON []byte, want CeremonyType, challenge Challenge, exp
 	if err != nil {
 		return fmt.Errorf("harbor: decoding client data challenge: %w", err)
 	}
+	if !bytes.Equal(got, challenge) {
+		return errors.New("harbor: challenge mismatch (possible replay or wrong ceremony)")
+	}
+	if cd.Origin != expectOrigin {
+		return fmt.Errorf("harbor: origin %q, want %q", cd.Origin, expectOrigin)
+	}
+	return nil
+}
+
+// verifyRPIDHash checks the RP ID hash prefix of authenticator data.
+func verifyRPIDHash(ad AuthenticatorData, rpID string) error {
+	want := RPIDHash(rpID)
+	if !bytes.Equal(ad.RPIDHash[:], want[:]) {
+		return errors.New("harbor: RP ID hash mismatch")
+	}
+	return nil
+}
+
+// verifyUVFlag enforces the user-verification policy against the UV flag.
+func verifyUVFlag(ad AuthenticatorData, req UserVerification) error {
+	if req == UVRequired && !ad.Has(FlagUserVerified) {
+		return errors.New("harbor: user verification required but UV flag not set")
+	}
+	return nil
+}
+
+// verifyCounter enforces signature-counter monotonicity. A stored counter of 0
+// with a new value of 0 is tolerated (authenticator does not implement a
+// counter); otherwise the new value must strictly exceed the stored one.
+func verifyCounter(stored, got uint32) error {
+	if stored == 0 && got == 0 {
+		return nil
+	}
+	if got <= stored {
+		return fmt.Errorf("harbor: signature counter did not increase (stored=%d, got=%d): possible cloned authenticator", stored, got)
+	}
+	return nil
+// review note
