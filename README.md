@@ -65,3 +65,38 @@ Implemented against the Go standard library only (`crypto/ed25519`,
   enforced and a 32-byte default.
 - **`base64url`** encode and decode without padding, with lenient decoding for
   hand-authored fixtures.
+- **Client data** for `webauthn.create` and `webauthn.get`: canonical JSON,
+  SHA-256 `clientDataHash`, strict decoding that rejects unknown fields.
+- **Authenticator data** in the exact wire layout
+  `rpIdHash(32) then flags(1) then signCount(4, big-endian) then trailing`,
+  with UP, UV, BE, BS, AT, and ED flags.
+- **Virtual authenticator** holding resident (discoverable) Ed25519 credentials,
+  each with a signature counter and a configurable user-verification capability.
+- **Relying-party verification**: origin, ceremony type, challenge equality, RP
+  ID hash, user-verification policy, user presence, the Ed25519 assertion
+  signature, and signature-counter monotonicity.
+- **Scenario engine** covering positive and negative expectations across the
+  registration, authentication, policy, and security categories.
+- **Reports** in JSON (schema `passkeypier/report/v1`) and human-readable text.
+
+The TypeScript lab in `web/` validates the JSON report against the schema before
+rendering, then shows a summary, per-category totals, and an expandable list of
+scenarios. It carries no runtime dependencies and makes no network access.
+
+---
+
+## Quick departure
+
+You need **Go 1.24+**. The web lab additionally needs a TypeScript compiler
+(`tsc`) if you want to typecheck or build it.
+
+```sh
+# Run the full conformance suite (human-readable)
+go run ./cmd/passkeypier run
+
+# Emit a JSON report for the browser lab
+go run ./cmd/passkeypier run -format json -out report.json
+
+# Perform a single honest register plus authenticate ceremony
+go run ./cmd/passkeypier demo
+
