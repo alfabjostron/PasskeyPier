@@ -50,3 +50,19 @@ make the *logic* of the ceremony legible and testable.
 ## 2. Data model
 
 ### 2.1 Challenge
+
+A challenge is `n` random bytes from `crypto/rand`. The WebAuthn-recommended
+minimum of 16 bytes is enforced; the default is 32 bytes. On the wire the
+challenge appears inside client data as unpadded base64url.
+
+### 2.2 Client data
+
+```json
+{
+  "type": "webauthn.create" | "webauthn.get",
+  "challenge": "<base64url>",
+  "origin": "https://harbor.example",
+  "crossOrigin": false
+}
+```
+
