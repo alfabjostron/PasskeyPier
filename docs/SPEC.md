@@ -127,3 +127,19 @@ Let `stored` be the last accepted counter and `got` the incoming value.
 - `stored == 0 && got == 0`: accepted (authenticator does not implement a
   counter).
 - otherwise `got` MUST be strictly greater than `stored`; a non-increasing
+  counter is treated as a cloned-authenticator signal and rejected.
+
+## 6. User-verification policy
+
+| Policy        | UV-capable authenticator | UV performed | `UV` flag required at RP |
+| ------------- | ------------------------ | ------------ | ------------------------ |
+| `required`    | yes                      | yes          | yes                      |
+| `required`    | no                       | —            | ceremony rejected        |
+| `preferred`   | yes                      | yes          | no                       |
+| `preferred`   | no                       | no           | no                       |
+| `discouraged` | either                   | no           | no                       |
+
+## 7. Report schema (`passkeypier/report/v1`)
+
+```jsonc
+{
