@@ -58,3 +58,19 @@ challenge appears inside client data as unpadded base64url.
 ### 2.2 Client data
 
 ```json
+{
+  "type": "webauthn.create" | "webauthn.get",
+  "challenge": "<base64url>",
+  "origin": "https://harbor.example",
+  "crossOrigin": false
+}
+```
+
+The exact serialized bytes are hashed with SHA-256 to produce the
+`clientDataHash`. During verification, client data is decoded with unknown
+fields disallowed so that tampered or malformed payloads are rejected.
+
+### 2.3 Authenticator data
+
+Wire layout (big-endian counter):
+
