@@ -16,3 +16,18 @@ and no network.
 ### In scope
 
 - Secure random challenge generation and lifecycle.
+- `base64url` (unpadded) encoding of binary values.
+- Client data (`webauthn.create` / `webauthn.get`) construction and SHA-256
+  hashing.
+- Authenticator data layout, flag bits, and the big-endian signature counter.
+- Ed25519 (COSE algorithm `-8`, OKP curve Ed25519) signing and verification.
+- Relying-party verification steps: type, challenge, origin, RP ID hash,
+  user-verification policy, user presence, signature, and counter monotonicity.
+- User-verification policy semantics (`required` / `preferred` / `discouraged`).
+- A scenario engine with positive/negative expectations and JSON/text reports.
+
+### Explicit non-goals
+
+passkeypier is **not** a FIDO-certified implementation and makes no
+certification claims. The following are intentionally out of scope:
+
