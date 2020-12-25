@@ -318,3 +318,38 @@ tsc              # compile to web/dist
 ```
 
 Then open `web/index.html` in a browser and either drop a `report.json` onto the
+dock, choose a file, or click **Load bundled sample**.
+
+> The lab is a report viewer and teaching aid. It does not itself invoke the
+> browser WebAuthn API; the ceremonies are performed by the Go core.
+
+---
+
+## Layout of the harbor
+
+```
+passkeypier/
+├── cmd/passkeypier/        # CLI: run | demo | list | version
+│   └── main.go
+├── internal/harbor/        # standard-library ceremony core
+│   ├── base64url.go        # unpadded base64url
+│   ├── challenge.go        # crypto/rand challenges
+│   ├── model.go            # client data, authenticator data, flags
+│   ├── authenticator.go    # virtual Ed25519 authenticator + counters
+│   ├── relyingparty.go     # RP config, UV policy, options
+│   ├── ceremony.go         # register/authenticate + all verifications
+│   ├── scenarios.go        # built-in conformance suite
+│   ├── report.go           # JSON + text report engine
+│   ├── helpers.go          # negative-test primitives
+│   ├── json.go             # strict decode + origin constructors
+│   └── harbor_test.go      # focused unit tests
+├── examples/               # runnable examples + sample report
+│   ├── demo_test.go
+│   └── sample-report.json
+├── web/                    # dependency-light TypeScript browser lab
+│   ├── src/{types,report,render,main}.ts
+│   ├── index.html
+│   ├── styles.css
+│   ├── tsconfig.json
+│   └── package.json
+├── docs/
