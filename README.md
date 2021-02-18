@@ -222,3 +222,38 @@ authenticate/happy-path                      [authentication, expect accept]
 authenticate/wrong-origin                    [authentication, expect reject]
     An assertion whose client data reports a foreign origin must be rejected.
 authenticate/replayed-challenge              [authentication, expect reject]
+    Reusing a stale challenge from a prior ceremony must fail the challenge check.
+authenticate/uv-required-satisfied           [policy, expect accept]
+    UV=required with a UV-capable authenticator sets the UV flag and passes.
+authenticate/cloned-counter-regression       [security, expect reject]
+    A signature counter that fails to advance signals a cloned authenticator and must be rejected.
+authenticate/tampered-signature              [security, expect reject]
+    Flipping a byte of the assertion signature must fail Ed25519 verification.
+authenticate/wrong-rp-binding                [security, expect reject]
+    Authenticator data carrying a foreign RP ID hash must fail the RP ID hash check.
+```
+
+---
+
+## Conformance scenarios
+
+Each scenario is a self-contained check with an expectation: either the harbor
+should accept the ceremony, or it should reject it. A negative scenario that is
+accidentally accepted counts as a conformance failure, which is how the lab
+exercises the security checks.
+
+| Scenario | Category | Expect | What it proves |
+| --- | --- | --- | --- |
+| `register/happy-path-uv-preferred` | registration | accept | Honest create ceremony with a UV-capable authenticator. |
+| `register/uv-required-without-uv-support` | registration | reject | `UV=required` fails when the authenticator cannot verify the user. |
+| `authenticate/happy-path` | authentication | accept | Signature, origin, and counter all valid end to end. |
+| `authenticate/wrong-origin` | authentication | reject | A foreign origin in client data is caught. |
+| `authenticate/replayed-challenge` | authentication | reject | A stale or mismatched challenge fails the equality check. |
+| `authenticate/uv-required-satisfied` | policy | accept | `UV=required` sets and enforces the UV flag. |
+| `authenticate/cloned-counter-regression` | security | reject | A non-advancing counter signals a cloned authenticator. |
+| `authenticate/tampered-signature` | security | reject | A forged or flipped signature fails Ed25519 verification. |
+| `authenticate/wrong-rp-binding` | security | reject | Authenticator data with a foreign RP ID hash is rejected. |
+
+---
+
+## The report format
