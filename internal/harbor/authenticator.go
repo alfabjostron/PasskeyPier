@@ -94,3 +94,21 @@ func (c *credential) buildAuthData(uv, includeAttested bool, aaguid [16]byte) Au
 	}
 	if includeAttested {
 		ad.Flags |= FlagAttestedData
+		// Attested credential data layout: aaguid(16) || credIdLen(2) ||
+		// credId || credentialPublicKey. We model the public key as the raw
+		// 32-byte Ed25519 key rather than full COSE_Key CBOR, since this lab
+		// verifies with the stored key object and does not parse CBOR.
+		trailing := make([]byte, 0, 16+2+len(c.id)+len(c.pub))
+		trailing = append(trailing, aaguid[:]...)
+		l := len(c.id)
+		trailing = append(trailing, byte(l>>8), byte(l))
+		trailing = append(trailing, c.id...)
+		trailing = append(trailing, c.pub...)
+		ad.Trailing = trailing
+	}
+	return ad
+}
+
+// errUVUnsupported is returned when a ceremony requires UV but the
+// authenticator cannot perform it.
+// review note
