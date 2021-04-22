@@ -147,3 +147,18 @@ Let `stored` be the last accepted counter and `got` the incoming value.
   "tool": "passkeypier",
   "generated_at": "<RFC3339 UTC>",
   "summary": { "total": 9, "passed": 9, "failed": 0, "all_passed": true },
+  "categories": [ { "category": "security", "passed": 3, "failed": 0 } ],
+  "results": [
+    {
+      "name": "authenticate/wrong-origin",
+      "category": "authentication",
+      "description": "…",
+      "expectation": "reject",
+      "outcome": "pass",
+      "detail": "rejected as expected: harbor: origin …",
+      "duration_ns": 123456
+    }
+  ]
+}
+```
+
