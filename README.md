@@ -126,3 +126,38 @@ make help       # list all targets
 fresh challenge and a user-verification policy. The ship mints a new Ed25519
 credential bound to the relying-party ID, builds client data, and returns
 authenticator data with the `AT` (attested-credential-data) flag set. The harbor
+checks type, challenge, and origin, the RP ID hash, the UV policy, and user
+presence, then stores the public key, sign count, user handle, and backup
+eligibility.
+
+**Authentication (`webauthn.get`).** The harbor issues request options with a
+fresh challenge. The ship selects a resident credential, increments its counter,
+and signs the concatenation `authenticatorData then SHA-256(clientData)` with
+Ed25519. The harbor verifies everything registration checks, plus the signature
+against the stored public key and the counter's monotonic advance.
+
+The signed message is identical in structure to a real WebAuthn assertion:
+
+```
+message   = authenticatorData || SHA-256(clientDataJSON)
+signature = Ed25519_Sign(credentialPrivateKey, message)
+```
+
+---
+
+## Command transcripts
+
+These are real outputs from the tool. Random values (credential ids, keys,
+signatures, timestamps) will differ per run.
+
+### `passkeypier demo -uv required`
+
+```text
+$ go run ./cmd/passkeypier demo -uv required
+registration OK
+  credential id: wxr0Wjqp7DvSVVJ9CSf4bg
+  public key:    ZtSsH6A-tfSIGUR8esyG4cjJgyVt2u5CbfoLmT6nTlg
+  user verified: true
+authentication OK
+  credential id: wxr0Wjqp7DvSVVJ9CSf4bg
+  signature:     3bH_oSthdboI8ijkQafBh3uE_2BpgF0UZ48VykA_PnDsmePMzSmukiSm9_CHcMJ_Z7qARP9XUo5jMn6JSskiDA
