@@ -170,3 +170,38 @@ and the base64url signature is 86 characters (64 raw Ed25519 bytes).
 
 ### `passkeypier run`
 
+```text
+$ go run ./cmd/passkeypier run
+passkeypier conformance report
+==============================
+generated: 2026-08-31T17:54:56Z
+schema:    passkeypier/report/v1
+
+[PASS] authenticate/cloned-counter-regression     (security, expect reject)
+       rejected as expected: harbor: signature counter did not increase (stored=99, got=1): possible cloned authenticator
+[PASS] authenticate/happy-path                    (authentication, expect accept)
+       ceremony accepted as expected
+[PASS] authenticate/replayed-challenge            (authentication, expect reject)
+       rejected as expected: harbor: challenge mismatch (possible replay or wrong ceremony)
+[PASS] authenticate/tampered-signature            (security, expect reject)
+       rejected as expected: harbor: assertion signature verification failed
+[PASS] authenticate/uv-required-satisfied         (policy, expect accept)
+       ceremony accepted as expected
+[PASS] authenticate/wrong-origin                  (authentication, expect reject)
+       rejected as expected: harbor: origin "https://evil.example", want "https://harbor.example"
+[PASS] authenticate/wrong-rp-binding              (security, expect reject)
+       rejected as expected: harbor: RP ID hash mismatch
+[PASS] register/happy-path-uv-preferred           (registration, expect accept)
+       ceremony accepted as expected
+[PASS] register/uv-required-without-uv-support    (registration, expect reject)
+       rejected as expected: harbor: authenticator does not support user verification
+
+by category:
+  authentication pass=3 fail=0
+  policy         pass=1 fail=0
+  registration   pass=2 fail=0
+  security       pass=3 fail=0
+
+summary: 9 passed, 0 failed of 9 total
+result: ALL SCENARIOS PASSED
+```
