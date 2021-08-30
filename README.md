@@ -275,3 +275,37 @@ Reports carry the schema tag `passkeypier/report/v1`. The JSON shape:
   "results": [
     {
       "name": "authenticate/wrong-origin",
+      "category": "authentication",
+      "description": "An assertion whose client data reports a foreign origin must be rejected.",
+      "expectation": "reject",
+      "outcome": "pass",
+      "detail": "rejected as expected: harbor: origin \"https://evil.example\", want \"https://harbor.example\"",
+      "duration_ns": 41000
+    }
+  ]
+}
+```
+
+A full sample lives at [`examples/sample-report.json`](examples/sample-report.json).
+Regenerate it any time with `make report` or the `-out` flag.
+
+Programmatic use from Go is equally direct (see
+[`examples/demo_test.go`](examples/demo_test.go)):
+
+```go
+results := harbor.RunScenarios(harbor.DefaultScenarios())
+report := harbor.BuildReport(results)
+_ = report.WriteJSON(os.Stdout) // or report.WriteText(os.Stdout)
+```
+
+---
+
+## The browser lab
+
+The lab in [`web/`](web/) is a small, dependency-light TypeScript app. It:
+
+- validates an untrusted report against the `passkeypier/report/v1` schema
+  before rendering, rejecting bad types, unknown outcomes, and a wrong schema;
+- renders a pass or fail banner, per-category cards, and expandable scenarios;
+- builds DOM nodes with `textContent` and never `innerHTML` from report data;
+- runs fully offline, with no CDN, fonts, images, or telemetry. A sample report
