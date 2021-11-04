@@ -144,3 +144,38 @@ signature = Ed25519_Sign(credentialPrivateKey, message)
 ```
 
 ---
+
+## Command transcripts
+
+These are real outputs from the tool. Random values (credential ids, keys,
+signatures, timestamps) will differ per run.
+
+### `passkeypier demo -uv required`
+
+```text
+$ go run ./cmd/passkeypier demo -uv required
+registration OK
+  credential id: wxr0Wjqp7DvSVVJ9CSf4bg
+  public key:    ZtSsH6A-tfSIGUR8esyG4cjJgyVt2u5CbfoLmT6nTlg
+  user verified: true
+authentication OK
+  credential id: wxr0Wjqp7DvSVVJ9CSf4bg
+  signature:     3bH_oSthdboI8ijkQafBh3uE_2BpgF0UZ48VykA_PnDsmePMzSmukiSm9_CHcMJ_Z7qARP9XUo5jMn6JSskiDA
+  user verified: true
+  user handle:   mariner-1
+```
+
+Note that the credential id in the assertion matches the one from registration,
+and the base64url signature is 86 characters (64 raw Ed25519 bytes).
+
+### `passkeypier run`
+
+```text
+$ go run ./cmd/passkeypier run
+passkeypier conformance report
+==============================
+generated: 2026-08-31T17:54:56Z
+schema:    passkeypier/report/v1
+
+[PASS] authenticate/cloned-counter-regression     (security, expect reject)
+       rejected as expected: harbor: signature counter did not increase (stored=99, got=1): possible cloned authenticator
