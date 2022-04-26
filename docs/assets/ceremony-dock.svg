@@ -31,3 +31,8 @@
   </g>
 
   <!-- outbound challenge -->
+  <line x1="220" y1="128" x2="480" y2="128" stroke="#3ddc97" stroke-width="2.5"
+        stroke-dasharray="8 6" marker-end="url(#a)">
+    <animate attributeName="stroke-dashoffset" values="28;0" dur="1.1s" repeatCount="indefinite"/>
+  </line>
+  <text x="350" y="118" text-anchor="middle" fill="#3ddc97" font-family="monospace" font-size="12">challenge: 32 random bytes</text>
