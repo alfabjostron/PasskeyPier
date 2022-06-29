@@ -135,3 +135,38 @@ fresh challenge. The ship selects a resident credential, increments its counter,
 and signs the concatenation `authenticatorData then SHA-256(clientData)` with
 Ed25519. The harbor verifies everything registration checks, plus the signature
 against the stored public key and the counter's monotonic advance.
+
+The signed message is identical in structure to a real WebAuthn assertion:
+
+```
+message   = authenticatorData || SHA-256(clientDataJSON)
+signature = Ed25519_Sign(credentialPrivateKey, message)
+```
+
+---
+
+## Command transcripts
+
+These are real outputs from the tool. Random values (credential ids, keys,
+signatures, timestamps) will differ per run.
+
+### `passkeypier demo -uv required`
+
+```text
+$ go run ./cmd/passkeypier demo -uv required
+registration OK
+  credential id: wxr0Wjqp7DvSVVJ9CSf4bg
+  public key:    ZtSsH6A-tfSIGUR8esyG4cjJgyVt2u5CbfoLmT6nTlg
+  user verified: true
+authentication OK
+  credential id: wxr0Wjqp7DvSVVJ9CSf4bg
+  signature:     3bH_oSthdboI8ijkQafBh3uE_2BpgF0UZ48VykA_PnDsmePMzSmukiSm9_CHcMJ_Z7qARP9XUo5jMn6JSskiDA
+  user verified: true
+  user handle:   mariner-1
+```
+
+Note that the credential id in the assertion matches the one from registration,
+and the base64url signature is 86 characters (64 raw Ed25519 bytes).
+
+### `passkeypier run`
+
