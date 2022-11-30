@@ -50,3 +50,8 @@
     </marker>
     <marker id="b" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
       <path d="M0,0 L6,3 L0,6 Z" fill="#f2b134"/>
+    </marker>
+  </defs>
+
+  <!-- signed message construction -->
+  <g transform="translate(140 250)">
