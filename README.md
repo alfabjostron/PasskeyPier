@@ -83,3 +83,38 @@ The TypeScript lab in `web/` validates the JSON report against the schema before
 rendering, then shows a summary, per-category totals, and an expandable list of
 scenarios. It carries no runtime dependencies and makes no network access.
 
+---
+
+## Quick departure
+
+You need **Go 1.24+**. The web lab additionally needs a TypeScript compiler
+(`tsc`) if you want to typecheck or build it.
+
+```sh
+# Run the full conformance suite (human-readable)
+go run ./cmd/passkeypier run
+
+# Emit a JSON report for the browser lab
+go run ./cmd/passkeypier run -format json -out report.json
+
+# Perform a single honest register plus authenticate ceremony
+go run ./cmd/passkeypier demo
+
+# List every scenario and what it asserts
+go run ./cmd/passkeypier list
+```
+
+Or use the Makefile:
+
+```sh
+make            # build + test
+make run        # text conformance report
+make report     # writes report.json
+make demo       # one ceremony
+make help       # list all targets
+```
+
+---
+
+## The two ceremonies at the dock
+
