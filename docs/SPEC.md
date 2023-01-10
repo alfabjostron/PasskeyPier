@@ -70,3 +70,18 @@ The exact serialized bytes are hashed with SHA-256 to produce the
 `clientDataHash`. During verification, client data is decoded with unknown
 fields disallowed so that tampered or malformed payloads are rejected.
 
+### 2.3 Authenticator data
+
+Wire layout (big-endian counter):
+
+```
+| rpIdHash (32) | flags (1) | signCount (4) | attestedCredentialData + extensions (var) |
+```
+
+Flag bits: `UP` (0x01), `UV` (0x04), `BE` (0x08), `BS` (0x10), `AT` (0x40),
+`ED` (0x80).
+
+When present (registration only, `AT` set), attested credential data is laid
+out as `aaguid(16) || credIdLen(2) || credId || publicKey`. The public key is
+the raw 32-byte Ed25519 key (see non-goals — this is not COSE_Key CBOR).
+
