@@ -116,3 +116,18 @@ signature = Ed25519_Sign(credentialPrivateKey, message)
 2. A resident credential for the RP is selected; its counter increments.
 3. The client builds client data with `type = webauthn.get`.
 4. The authenticator signs `authData || clientDataHash` with Ed25519.
+5. The RP verifies: type/challenge/origin, RP ID hash, UV policy, user
+   presence, Ed25519 signature against the stored public key, and signature
+   counter monotonicity, then persists the new counter.
+
+## 5. Signature counter policy
+
+Let `stored` be the last accepted counter and `got` the incoming value.
+
+- `stored == 0 && got == 0`: accepted (authenticator does not implement a
+  counter).
+- otherwise `got` MUST be strictly greater than `stored`; a non-increasing
+  counter is treated as a cloned-authenticator signal and rejected.
+
+## 6. User-verification policy
+
