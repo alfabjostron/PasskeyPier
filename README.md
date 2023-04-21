@@ -266,3 +266,38 @@ Reports carry the schema tag `passkeypier/report/v1`. The JSON shape:
   "tool": "passkeypier",
   "generated_at": "2026-08-31T17:59:21Z",
   "summary": { "total": 9, "passed": 9, "failed": 0, "all_passed": true },
+  "categories": [
+    { "category": "authentication", "passed": 3, "failed": 0 },
+    { "category": "policy", "passed": 1, "failed": 0 },
+    { "category": "registration", "passed": 2, "failed": 0 },
+    { "category": "security", "passed": 3, "failed": 0 }
+  ],
+  "results": [
+    {
+      "name": "authenticate/wrong-origin",
+      "category": "authentication",
+      "description": "An assertion whose client data reports a foreign origin must be rejected.",
+      "expectation": "reject",
+      "outcome": "pass",
+      "detail": "rejected as expected: harbor: origin \"https://evil.example\", want \"https://harbor.example\"",
+      "duration_ns": 41000
+    }
+  ]
+}
+```
+
+A full sample lives at [`examples/sample-report.json`](examples/sample-report.json).
+Regenerate it any time with `make report` or the `-out` flag.
+
+Programmatic use from Go is equally direct (see
+[`examples/demo_test.go`](examples/demo_test.go)):
+
+```go
+results := harbor.RunScenarios(harbor.DefaultScenarios())
+report := harbor.BuildReport(results)
+_ = report.WriteJSON(os.Stdout) // or report.WriteText(os.Stdout)
+```
+
+---
+
+## The browser lab
