@@ -205,3 +205,38 @@ by category:
 summary: 9 passed, 0 failed of 9 total
 result: ALL SCENARIOS PASSED
 ```
+
+The process exits `0` when every scenario meets its expectation and `1` when any
+conformance failure is present, which is convenient for CI gating.
+
+### `passkeypier list`
+
+```text
+$ go run ./cmd/passkeypier list
+register/happy-path-uv-preferred             [registration, expect accept]
+    Honest registration with a UV-capable authenticator and preferred policy.
+register/uv-required-without-uv-support      [registration, expect reject]
+    UV=required against an authenticator that cannot verify the user must be rejected.
+authenticate/happy-path                      [authentication, expect accept]
+    Register then authenticate honestly; signature, origin and counter all valid.
+authenticate/wrong-origin                    [authentication, expect reject]
+    An assertion whose client data reports a foreign origin must be rejected.
+authenticate/replayed-challenge              [authentication, expect reject]
+    Reusing a stale challenge from a prior ceremony must fail the challenge check.
+authenticate/uv-required-satisfied           [policy, expect accept]
+    UV=required with a UV-capable authenticator sets the UV flag and passes.
+authenticate/cloned-counter-regression       [security, expect reject]
+    A signature counter that fails to advance signals a cloned authenticator and must be rejected.
+authenticate/tampered-signature              [security, expect reject]
+    Flipping a byte of the assertion signature must fail Ed25519 verification.
+authenticate/wrong-rp-binding                [security, expect reject]
+    Authenticator data carrying a foreign RP ID hash must fail the RP ID hash check.
+```
+
+---
+
+## Conformance scenarios
+
+Each scenario is a self-contained check with an expectation: either the harbor
+should accept the ceremony, or it should reject it. A negative scenario that is
+accidentally accepted counts as a conformance failure, which is how the lab
