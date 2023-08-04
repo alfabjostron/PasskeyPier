@@ -7,3 +7,8 @@
     data hash, and the relying party verifies it.</desc>
 
   <rect width="700" height="320" fill="#0c1b2a"/>
+
+  <!-- relying party -->
+  <g>
+    <rect x="36" y="80" width="180" height="150" rx="8" fill="#163049" stroke="#2e5a80" stroke-width="2"/>
+    <text x="126" y="112" text-anchor="middle" fill="#e8eff5" font-family="monospace" font-size="16">Relying Party</text>
