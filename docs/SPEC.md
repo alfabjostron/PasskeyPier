@@ -100,3 +100,19 @@ signature = Ed25519_Sign(credentialPrivateKey, message)
    user-verification policy.
 2. The virtual authenticator mints a fresh Ed25519 credential (resident/
    discoverable) bound to the RP ID.
+3. The client builds client data with `type = webauthn.create`.
+4. The authenticator emits authenticator data with `AT` set (and `UV` if user
+   verification was performed).
+5. The RP verifies: client data type/challenge/origin, RP ID hash, UV policy,
+   user presence — then stores the credential public key, sign count, user
+   handle, and backup eligibility.
+
+`UV = required` against an authenticator without UV capability is rejected.
+
+## 4. Authentication ceremony (`webauthn.get`)
+
+1. RP issues `AuthenticationOptions` with a fresh challenge, UV policy, and an
+   optional allow-list credential id.
+2. A resident credential for the RP is selected; its counter increments.
+3. The client builds client data with `type = webauthn.get`.
+4. The authenticator signs `authData || clientDataHash` with Ed25519.
