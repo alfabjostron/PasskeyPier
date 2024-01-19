@@ -91,3 +91,38 @@ You need **Go 1.24+**. The web lab additionally needs a TypeScript compiler
 (`tsc`) if you want to typecheck or build it.
 
 ```sh
+# Run the full conformance suite (human-readable)
+go run ./cmd/passkeypier run
+
+# Emit a JSON report for the browser lab
+go run ./cmd/passkeypier run -format json -out report.json
+
+# Perform a single honest register plus authenticate ceremony
+go run ./cmd/passkeypier demo
+
+# List every scenario and what it asserts
+go run ./cmd/passkeypier list
+```
+
+Or use the Makefile:
+
+```sh
+make            # build + test
+make run        # text conformance report
+make report     # writes report.json
+make demo       # one ceremony
+make help       # list all targets
+```
+
+---
+
+## The two ceremonies at the dock
+
+<p align="center">
+  <img src="docs/assets/ceremony-dock.svg" alt="Data flow between relying party and authenticator: a challenge goes out, authenticator data and an Ed25519 signature come back" width="680" />
+</p>
+
+**Registration (`webauthn.create`).** The harbor issues creation options with a
+fresh challenge and a user-verification policy. The ship mints a new Ed25519
+credential bound to the relying-party ID, builds client data, and returns
+authenticator data with the `AT` (attested-credential-data) flag set. The harbor
