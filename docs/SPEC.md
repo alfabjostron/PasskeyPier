@@ -120,3 +120,18 @@ signature = Ed25519_Sign(credentialPrivateKey, message)
    presence, Ed25519 signature against the stored public key, and signature
    counter monotonicity, then persists the new counter.
 
+## 5. Signature counter policy
+
+Let `stored` be the last accepted counter and `got` the incoming value.
+
+- `stored == 0 && got == 0`: accepted (authenticator does not implement a
+  counter).
+- otherwise `got` MUST be strictly greater than `stored`; a non-increasing
+  counter is treated as a cloned-authenticator signal and rejected.
+
+## 6. User-verification policy
+
+| Policy        | UV-capable authenticator | UV performed | `UV` flag required at RP |
+| ------------- | ------------------------ | ------------ | ------------------------ |
+| `required`    | yes                      | yes          | yes                      |
+| `required`    | no                       | —            | ceremony rejected        |
