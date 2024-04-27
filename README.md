@@ -301,3 +301,38 @@ _ = report.WriteJSON(os.Stdout) // or report.WriteText(os.Stdout)
 ---
 
 ## The browser lab
+
+The lab in [`web/`](web/) is a small, dependency-light TypeScript app. It:
+
+- validates an untrusted report against the `passkeypier/report/v1` schema
+  before rendering, rejecting bad types, unknown outcomes, and a wrong schema;
+- renders a pass or fail banner, per-category cards, and expandable scenarios;
+- builds DOM nodes with `textContent` and never `innerHTML` from report data;
+- runs fully offline, with no CDN, fonts, images, or telemetry. A sample report
+  is embedded in the page so it works with zero network access.
+
+```sh
+cd web
+tsc --noEmit     # strict typecheck
+tsc              # compile to web/dist
+```
+
+Then open `web/index.html` in a browser and either drop a `report.json` onto the
+dock, choose a file, or click **Load bundled sample**.
+
+> The lab is a report viewer and teaching aid. It does not itself invoke the
+> browser WebAuthn API; the ceremonies are performed by the Go core.
+
+---
+
+## Layout of the harbor
+
+```
+passkeypier/
+├── cmd/passkeypier/        # CLI: run | demo | list | version
+│   └── main.go
+├── internal/harbor/        # standard-library ceremony core
+│   ├── base64url.go        # unpadded base64url
+│   ├── challenge.go        # crypto/rand challenges
+│   ├── model.go            # client data, authenticator data, flags
+│   ├── authenticator.go    # virtual Ed25519 authenticator + counters
