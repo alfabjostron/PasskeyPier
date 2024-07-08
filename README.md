@@ -39,3 +39,38 @@ transport bindings. The exact scope and the honest list of non-goals live in
 - [License](#license)
 
 ---
+
+## Why a pier
+
+A passkey ceremony is a small piece of maritime choreography. The relying party
+(the harbor) issues a one-time challenge, a bottle thrown into the water. The
+authenticator (a ship carrying a private Ed25519 key) writes its reply, seals it
+with a signature, and sends it back. The harbor's lighthouse checks every
+returning vessel. Is this the right origin? The challenge I actually issued?
+Bound to my relying-party identifier? Did the signature counter advance, or is
+this a cloned ship? Only when every check passes may the credential dock.
+
+passkeypier makes that choreography runnable and testable, with no browser or
+hardware key in sight.
+
+---
+
+## What sails in and out
+
+Implemented against the Go standard library only (`crypto/ed25519`,
+`crypto/rand`, `crypto/sha256`, `encoding/base64`, `encoding/json`,
+`encoding/binary`):
+
+- **Secure challenges** from `crypto/rand`, with the 16-byte spec minimum
+  enforced and a 32-byte default.
+- **`base64url`** encode and decode without padding, with lenient decoding for
+  hand-authored fixtures.
+- **Client data** for `webauthn.create` and `webauthn.get`: canonical JSON,
+  SHA-256 `clientDataHash`, strict decoding that rejects unknown fields.
+- **Authenticator data** in the exact wire layout
+  `rpIdHash(32) then flags(1) then signCount(4, big-endian) then trailing`,
+  with UP, UV, BE, BS, AT, and ED flags.
+- **Virtual authenticator** holding resident (discoverable) Ed25519 credentials,
+  each with a signature counter and a configurable user-verification capability.
+- **Relying-party verification**: origin, ceremony type, challenge equality, RP
+  ID hash, user-verification policy, user presence, the Ed25519 assertion
