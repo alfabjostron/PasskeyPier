@@ -135,3 +135,18 @@ Let `stored` be the last accepted counter and `got` the incoming value.
 | ------------- | ------------------------ | ------------ | ------------------------ |
 | `required`    | yes                      | yes          | yes                      |
 | `required`    | no                       | —            | ceremony rejected        |
+| `preferred`   | yes                      | yes          | no                       |
+| `preferred`   | no                       | no           | no                       |
+| `discouraged` | either                   | no           | no                       |
+
+## 7. Report schema (`passkeypier/report/v1`)
+
+```jsonc
+{
+  "schema": "passkeypier/report/v1",
+  "tool": "passkeypier",
+  "generated_at": "<RFC3339 UTC>",
+  "summary": { "total": 9, "passed": 9, "failed": 0, "all_passed": true },
+  "categories": [ { "category": "security", "passed": 3, "failed": 0 } ],
+  "results": [
+    {
