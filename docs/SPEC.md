@@ -108,3 +108,19 @@ signature = Ed25519_Sign(credentialPrivateKey, message)
    handle, and backup eligibility.
 
 `UV = required` against an authenticator without UV capability is rejected.
+
+## 4. Authentication ceremony (`webauthn.get`)
+
+1. RP issues `AuthenticationOptions` with a fresh challenge, UV policy, and an
+   optional allow-list credential id.
+2. A resident credential for the RP is selected; its counter increments.
+3. The client builds client data with `type = webauthn.get`.
+4. The authenticator signs `authData || clientDataHash` with Ed25519.
+5. The RP verifies: type/challenge/origin, RP ID hash, UV policy, user
+   presence, Ed25519 signature against the stored public key, and signature
+   counter monotonicity, then persists the new counter.
+
+## 5. Signature counter policy
+
+Let `stored` be the last accepted counter and `got` the incoming value.
+
