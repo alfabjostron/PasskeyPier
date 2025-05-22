@@ -248,3 +248,38 @@ exercises the security checks.
 | `register/uv-required-without-uv-support` | registration | reject | `UV=required` fails when the authenticator cannot verify the user. |
 | `authenticate/happy-path` | authentication | accept | Signature, origin, and counter all valid end to end. |
 | `authenticate/wrong-origin` | authentication | reject | A foreign origin in client data is caught. |
+| `authenticate/replayed-challenge` | authentication | reject | A stale or mismatched challenge fails the equality check. |
+| `authenticate/uv-required-satisfied` | policy | accept | `UV=required` sets and enforces the UV flag. |
+| `authenticate/cloned-counter-regression` | security | reject | A non-advancing counter signals a cloned authenticator. |
+| `authenticate/tampered-signature` | security | reject | A forged or flipped signature fails Ed25519 verification. |
+| `authenticate/wrong-rp-binding` | security | reject | Authenticator data with a foreign RP ID hash is rejected. |
+
+---
+
+## The report format
+
+Reports carry the schema tag `passkeypier/report/v1`. The JSON shape:
+
+```json
+{
+  "schema": "passkeypier/report/v1",
+  "tool": "passkeypier",
+  "generated_at": "2026-08-31T17:59:21Z",
+  "summary": { "total": 9, "passed": 9, "failed": 0, "all_passed": true },
+  "categories": [
+    { "category": "authentication", "passed": 3, "failed": 0 },
+    { "category": "policy", "passed": 1, "failed": 0 },
+    { "category": "registration", "passed": 2, "failed": 0 },
+    { "category": "security", "passed": 3, "failed": 0 }
+  ],
+  "results": [
+    {
+      "name": "authenticate/wrong-origin",
+      "category": "authentication",
+      "description": "An assertion whose client data reports a foreign origin must be rejected.",
+      "expectation": "reject",
+      "outcome": "pass",
+      "detail": "rejected as expected: harbor: origin \"https://evil.example\", want \"https://harbor.example\"",
+      "duration_ns": 41000
+    }
+  ]
