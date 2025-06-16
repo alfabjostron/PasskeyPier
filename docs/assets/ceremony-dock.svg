@@ -44,3 +44,9 @@
   </line>
   <text x="350" y="204" text-anchor="middle" fill="#f2b134" font-family="monospace" font-size="12">authData + Ed25519 signature</text>
 
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#3ddc97"/>
+    </marker>
+    <marker id="b" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#f2b134"/>
