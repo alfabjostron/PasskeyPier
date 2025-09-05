@@ -237,3 +237,43 @@ func TestUserVerificationValidate(t *testing.T) {
 	if err := UserVerification("bogus").Validate(); err == nil {
 		t.Fatal("expected invalid UV to error")
 	}
+}
+
+func TestReportBuildAndRender(t *testing.T) {
+	results := RunScenarios(DefaultScenarios())
+	report := BuildReport(results)
+	if report.Summary.Total != len(results) {
+		t.Fatalf("total = %d, want %d", report.Summary.Total, len(results))
+	}
+	if !report.Summary.AllPassed {
+		t.Fatalf("expected all scenarios to pass, failed=%d", report.Summary.Failed)
+	}
+
+	var jsonBuf bytes.Buffer
+	if err := report.WriteJSON(&jsonBuf); err != nil {
+		t.Fatalf("WriteJSON: %v", err)
+	}
+	var decoded Report
+	if err := json.Unmarshal(jsonBuf.Bytes(), &decoded); err != nil {
+		t.Fatalf("report JSON does not round-trip: %v", err)
+	}
+	if decoded.Schema != ReportSchemaVersion {
+		t.Fatalf("schema = %q, want %q", decoded.Schema, ReportSchemaVersion)
+	}
+
+	var textBuf bytes.Buffer
+	if err := report.WriteText(&textBuf); err != nil {
+		t.Fatalf("WriteText: %v", err)
+	}
+	if !strings.Contains(textBuf.String(), "ALL SCENARIOS PASSED") {
+		t.Fatal("text report missing pass banner")
+	}
+}
+
+func TestUnknownFieldRejectedInClientData(t *testing.T) {
+	bad := []byte(`{"type":"webauthn.get","challenge":"abc","origin":"https://harbor.example","crossOrigin":false,"extra":1}`)
+	var cd ClientData
+	if err := decodeStrict(bad, &cd); err == nil {
+		t.Fatal("expected strict decode to reject unknown field")
+	}
+}
