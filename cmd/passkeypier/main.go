@@ -127,3 +127,30 @@ func cmdDemo(args []string) int {
 	fmt.Printf("  public key:    %s\n", harbor.EncodeBase64URL(reg.PublicKey))
 	fmt.Printf("  user verified: %v\n", reg.UserVerified)
 
+	authCh, err := harbor.NewChallenge(harbor.DefaultChallengeLen)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "passkeypier: %v\n", err)
+		return 1
+	}
+	auth, err := harbor.Authenticate(rp, va, harbor.AuthenticationOptions{
+		Challenge:        authCh,
+		UserVerification: uv,
+	}, harbor.Origin(origin))
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "passkeypier: authentication failed: %v\n", err)
+		return 1
+	}
+	fmt.Printf("authentication OK\n")
+	fmt.Printf("  credential id: %s\n", harbor.EncodeBase64URL(auth.CredentialID))
+	fmt.Printf("  signature:     %s\n", harbor.EncodeBase64URL(auth.Signature))
+	fmt.Printf("  user verified: %v\n", auth.UserVerified)
+	fmt.Printf("  user handle:   %s\n", string(auth.UserHandle))
+	return 0
+}
+
+func cmdList() int {
+	for _, s := range harbor.DefaultScenarios() {
+		fmt.Printf("%-44s [%s, expect %s]\n    %s\n", s.Name, s.Category, s.Expectation, s.Description)
+	}
+	return 0
+// review note
