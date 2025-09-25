@@ -85,3 +85,18 @@ When present (registration only, `AT` set), attested credential data is laid
 out as `aaguid(16) || credIdLen(2) || credId || publicKey`. The public key is
 the raw 32-byte Ed25519 key (see non-goals — this is not COSE_Key CBOR).
 
+### 2.4 Signed payload
+
+Both ceremonies compute the signed message as:
+
+```
+message = authenticatorData || SHA-256(clientDataJSON)
+signature = Ed25519_Sign(credentialPrivateKey, message)
+```
+
+## 3. Registration ceremony (`webauthn.create`)
+
+1. RP issues `RegistrationOptions` with a fresh challenge, user handle, and a
+   user-verification policy.
+2. The virtual authenticator mints a fresh Ed25519 credential (resident/
+   discoverable) bound to the RP ID.
