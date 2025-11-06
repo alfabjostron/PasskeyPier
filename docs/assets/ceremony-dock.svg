@@ -15,3 +15,8 @@
     <text x="126" y="134" text-anchor="middle" fill="#89a4bb" font-family="monospace" font-size="11">harbor.example</text>
     <line x1="60" y1="148" x2="192" y2="148" stroke="#2e5a80"/>
     <text x="126" y="172" text-anchor="middle" fill="#cfe0ee" font-family="monospace" font-size="11">issues challenge</text>
+    <text x="126" y="192" text-anchor="middle" fill="#cfe0ee" font-family="monospace" font-size="11">verifies assertion</text>
+    <text x="126" y="212" text-anchor="middle" fill="#cfe0ee" font-family="monospace" font-size="11">stores public key</text>
+  </g>
+
+  <!-- authenticator -->
