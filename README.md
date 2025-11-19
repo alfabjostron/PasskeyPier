@@ -196,3 +196,222 @@ schema:    passkeypier/report/v1
 [PASS] register/uv-required-without-uv-support    (registration, expect reject)
        rejected as expected: harbor: authenticator does not support user verification
 
+by category:
+  authentication pass=3 fail=0
+  policy         pass=1 fail=0
+  registration   pass=2 fail=0
+  security       pass=3 fail=0
+
+summary: 9 passed, 0 failed of 9 total
+result: ALL SCENARIOS PASSED
+```
+
+The process exits `0` when every scenario meets its expectation and `1` when any
+conformance failure is present, which is convenient for CI gating.
+
+### `passkeypier list`
+
+```text
+$ go run ./cmd/passkeypier list
+register/happy-path-uv-preferred             [registration, expect accept]
+    Honest registration with a UV-capable authenticator and preferred policy.
+register/uv-required-without-uv-support      [registration, expect reject]
+    UV=required against an authenticator that cannot verify the user must be rejected.
+authenticate/happy-path                      [authentication, expect accept]
+    Register then authenticate honestly; signature, origin and counter all valid.
+authenticate/wrong-origin                    [authentication, expect reject]
+    An assertion whose client data reports a foreign origin must be rejected.
+authenticate/replayed-challenge              [authentication, expect reject]
+    Reusing a stale challenge from a prior ceremony must fail the challenge check.
+authenticate/uv-required-satisfied           [policy, expect accept]
+    UV=required with a UV-capable authenticator sets the UV flag and passes.
+authenticate/cloned-counter-regression       [security, expect reject]
+    A signature counter that fails to advance signals a cloned authenticator and must be rejected.
+authenticate/tampered-signature              [security, expect reject]
+    Flipping a byte of the assertion signature must fail Ed25519 verification.
+authenticate/wrong-rp-binding                [security, expect reject]
+    Authenticator data carrying a foreign RP ID hash must fail the RP ID hash check.
+```
+
+---
+
+## Conformance scenarios
+
+Each scenario is a self-contained check with an expectation: either the harbor
+should accept the ceremony, or it should reject it. A negative scenario that is
+accidentally accepted counts as a conformance failure, which is how the lab
+exercises the security checks.
+
+| Scenario | Category | Expect | What it proves |
+| --- | --- | --- | --- |
+| `register/happy-path-uv-preferred` | registration | accept | Honest create ceremony with a UV-capable authenticator. |
+| `register/uv-required-without-uv-support` | registration | reject | `UV=required` fails when the authenticator cannot verify the user. |
+| `authenticate/happy-path` | authentication | accept | Signature, origin, and counter all valid end to end. |
+| `authenticate/wrong-origin` | authentication | reject | A foreign origin in client data is caught. |
+| `authenticate/replayed-challenge` | authentication | reject | A stale or mismatched challenge fails the equality check. |
+| `authenticate/uv-required-satisfied` | policy | accept | `UV=required` sets and enforces the UV flag. |
+| `authenticate/cloned-counter-regression` | security | reject | A non-advancing counter signals a cloned authenticator. |
+| `authenticate/tampered-signature` | security | reject | A forged or flipped signature fails Ed25519 verification. |
+| `authenticate/wrong-rp-binding` | security | reject | Authenticator data with a foreign RP ID hash is rejected. |
+
+---
+
+## The report format
+
+Reports carry the schema tag `passkeypier/report/v1`. The JSON shape:
+
+```json
+{
+  "schema": "passkeypier/report/v1",
+  "tool": "passkeypier",
+  "generated_at": "2026-08-31T17:59:21Z",
+  "summary": { "total": 9, "passed": 9, "failed": 0, "all_passed": true },
+  "categories": [
+    { "category": "authentication", "passed": 3, "failed": 0 },
+    { "category": "policy", "passed": 1, "failed": 0 },
+    { "category": "registration", "passed": 2, "failed": 0 },
+    { "category": "security", "passed": 3, "failed": 0 }
+  ],
+  "results": [
+    {
+      "name": "authenticate/wrong-origin",
+      "category": "authentication",
+      "description": "An assertion whose client data reports a foreign origin must be rejected.",
+      "expectation": "reject",
+      "outcome": "pass",
+      "detail": "rejected as expected: harbor: origin \"https://evil.example\", want \"https://harbor.example\"",
+      "duration_ns": 41000
+    }
+  ]
+}
+```
+
+A full sample lives at [`examples/sample-report.json`](examples/sample-report.json).
+Regenerate it any time with `make report` or the `-out` flag.
+
+Programmatic use from Go is equally direct (see
+[`examples/demo_test.go`](examples/demo_test.go)):
+
+```go
+results := harbor.RunScenarios(harbor.DefaultScenarios())
+report := harbor.BuildReport(results)
+_ = report.WriteJSON(os.Stdout) // or report.WriteText(os.Stdout)
+```
+
+---
+
+## The browser lab
+
+The lab in [`web/`](web/) is a small, dependency-light TypeScript app. It:
+
+- validates an untrusted report against the `passkeypier/report/v1` schema
+  before rendering, rejecting bad types, unknown outcomes, and a wrong schema;
+- renders a pass or fail banner, per-category cards, and expandable scenarios;
+- builds DOM nodes with `textContent` and never `innerHTML` from report data;
+- runs fully offline, with no CDN, fonts, images, or telemetry. A sample report
+  is embedded in the page so it works with zero network access.
+
+```sh
+cd web
+tsc --noEmit     # strict typecheck
+tsc              # compile to web/dist
+```
+
+Then open `web/index.html` in a browser and either drop a `report.json` onto the
+dock, choose a file, or click **Load bundled sample**.
+
+> The lab is a report viewer and teaching aid. It does not itself invoke the
+> browser WebAuthn API; the ceremonies are performed by the Go core.
+
+---
+
+## Layout of the harbor
+
+```
+passkeypier/
+├── cmd/passkeypier/        # CLI: run | demo | list | version
+│   └── main.go
+├── internal/harbor/        # standard-library ceremony core
+│   ├── base64url.go        # unpadded base64url
+│   ├── challenge.go        # crypto/rand challenges
+│   ├── model.go            # client data, authenticator data, flags
+│   ├── authenticator.go    # virtual Ed25519 authenticator + counters
+│   ├── relyingparty.go     # RP config, UV policy, options
+│   ├── ceremony.go         # register/authenticate + all verifications
+│   ├── scenarios.go        # built-in conformance suite
+│   ├── report.go           # JSON + text report engine
+│   ├── helpers.go          # negative-test primitives
+│   ├── json.go             # strict decode + origin constructors
+│   └── harbor_test.go      # focused unit tests
+├── examples/               # runnable examples + sample report
+│   ├── demo_test.go
+│   └── sample-report.json
+├── web/                    # dependency-light TypeScript browser lab
+│   ├── src/{types,report,render,main}.ts
+│   ├── index.html
+│   ├── styles.css
+│   ├── tsconfig.json
+│   └── package.json
+├── docs/
+│   ├── SPEC.md             # precise scope, data model, non-goals
+│   └── assets/             # two original SVG diagrams (no remote media)
+├── .github/workflows/ci.yml
+├── Makefile
+├── go.mod
+├── LICENSE
+├── CHANGELOG.md
+└── .gitignore
+```
+
+---
+
+## Building, testing, and CI
+
+```sh
+go build ./...            # compile everything
+go vet ./...              # static checks
+go test ./...             # unit tests + runnable examples
+go test -cover ./...      # with coverage
+```
+
+The Go core uses only the standard library, so `go.mod` declares no external
+requirements. CI ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) runs
+two jobs:
+
+- **Go**: verifies `go.mod` is tidy, then runs `vet`, `build`, `test -cover`,
+  and a JSON-report smoke run.
+- **TypeScript**: installs the pinned compiler, then runs `tsc --noEmit` and
+  `tsc`.
+
+---
+
+## Design notes and honest limits
+
+passkeypier is intentionally narrow so that what it does implement stays
+faithful:
+
+- **No attestation trust.** Registration attestation is treated as
+  `none`-equivalent. No `packed`, `tpm`, `apple`, or `fido-u2f` statements are
+  parsed or trusted. A passing report is not attestation validation.
+- **No CBOR or COSE_Key.** The credential public key is modeled as a raw 32-byte
+  Ed25519 key rather than a COSE_Key CBOR map. Signatures verify against the
+  stored key object.
+- **Ed25519 only.** ES256 (`-7`) and RS256 (`-257`) are out of scope.
+- **RP ID matching is exact.** There is no registrable-domain-suffix walking.
+- **No transport or CTAP framing, extensions, or enterprise features.**
+
+These boundaries are documented precisely in [`docs/SPEC.md`](docs/SPEC.md). The
+counter policy, UV policy table, and signed-message construction there match the
+code exactly. If you need certified behavior, use a certified stack; passkeypier
+exists to make the ceremony legible.
+
+The tool follows the relevant public specifications for structure: W3C Web
+Authentication Level 2, RFC 8032 (EdDSA), and RFC 9053 (COSE EdDSA `-8`).
+
+---
+
+## License
+
+Released under the [MIT License](LICENSE). Copyright 2026 PasskeyPier contributors.
+
+<!-- docs pass by narongmatuda95: scenario matrix table -->
