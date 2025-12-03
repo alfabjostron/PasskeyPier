@@ -104,3 +104,82 @@ signature = Ed25519_Sign(credentialPrivateKey, message)
 4. The authenticator emits authenticator data with `AT` set (and `UV` if user
    verification was performed).
 5. The RP verifies: client data type/challenge/origin, RP ID hash, UV policy,
+   user presence — then stores the credential public key, sign count, user
+   handle, and backup eligibility.
+
+`UV = required` against an authenticator without UV capability is rejected.
+
+## 4. Authentication ceremony (`webauthn.get`)
+
+1. RP issues `AuthenticationOptions` with a fresh challenge, UV policy, and an
+   optional allow-list credential id.
+2. A resident credential for the RP is selected; its counter increments.
+3. The client builds client data with `type = webauthn.get`.
+4. The authenticator signs `authData || clientDataHash` with Ed25519.
+5. The RP verifies: type/challenge/origin, RP ID hash, UV policy, user
+   presence, Ed25519 signature against the stored public key, and signature
+   counter monotonicity, then persists the new counter.
+
+## 5. Signature counter policy
+
+Let `stored` be the last accepted counter and `got` the incoming value.
+
+- `stored == 0 && got == 0`: accepted (authenticator does not implement a
+  counter).
+- otherwise `got` MUST be strictly greater than `stored`; a non-increasing
+  counter is treated as a cloned-authenticator signal and rejected.
+
+## 6. User-verification policy
+
+| Policy        | UV-capable authenticator | UV performed | `UV` flag required at RP |
+| ------------- | ------------------------ | ------------ | ------------------------ |
+| `required`    | yes                      | yes          | yes                      |
+| `required`    | no                       | —            | ceremony rejected        |
+| `preferred`   | yes                      | yes          | no                       |
+| `preferred`   | no                       | no           | no                       |
+| `discouraged` | either                   | no           | no                       |
+
+## 7. Report schema (`passkeypier/report/v1`)
+
+```jsonc
+{
+  "schema": "passkeypier/report/v1",
+  "tool": "passkeypier",
+  "generated_at": "<RFC3339 UTC>",
+  "summary": { "total": 9, "passed": 9, "failed": 0, "all_passed": true },
+  "categories": [ { "category": "security", "passed": 3, "failed": 0 } ],
+  "results": [
+    {
+      "name": "authenticate/wrong-origin",
+      "category": "authentication",
+      "description": "…",
+      "expectation": "reject",
+      "outcome": "pass",
+      "detail": "rejected as expected: harbor: origin …",
+      "duration_ns": 123456
+    }
+  ]
+}
+```
+
+A scenario's `outcome` is `pass` when the actual result matches its
+`expectation`. A negative scenario (`expectation = reject`) that is instead
+accepted is a conformance failure. The TypeScript lab validates this shape
+before rendering.
+
+## 8. Threat scenarios exercised
+
+- Foreign origin in client data → rejected.
+- Replayed / mismatched challenge → rejected.
+- Non-increasing signature counter → rejected.
+- Tampered / forged assertion signature → rejected.
+- Foreign RP ID hash → rejected.
+- `UV = required` without UV capability → rejected.
+
+## 9. References
+
+- W3C Web Authentication: An API for accessing Public Key Credentials, Level 2.
+- RFC 8032 — Edwards-Curve Digital Signature Algorithm (EdDSA).
+- RFC 9053 — CBOR Object Signing and Encryption (COSE) algorithms (EdDSA `-8`).
+
+<!-- ceremony spec review by Ramirez7291 -->
