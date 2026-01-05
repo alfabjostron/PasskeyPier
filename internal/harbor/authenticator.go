@@ -111,4 +111,4 @@ func (c *credential) buildAuthData(uv, includeAttested bool, aaguid [16]byte) Au
 
 // errUVUnsupported is returned when a ceremony requires UV but the
 // authenticator cannot perform it.
-// review note
+var errUVUnsupported = errors.New("harbor: authenticator does not support user verification")
