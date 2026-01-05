@@ -135,3 +135,51 @@ Let `stored` be the last accepted counter and `got` the incoming value.
 | ------------- | ------------------------ | ------------ | ------------------------ |
 | `required`    | yes                      | yes          | yes                      |
 | `required`    | no                       | —            | ceremony rejected        |
+| `preferred`   | yes                      | yes          | no                       |
+| `preferred`   | no                       | no           | no                       |
+| `discouraged` | either                   | no           | no                       |
+
+## 7. Report schema (`passkeypier/report/v1`)
+
+```jsonc
+{
+  "schema": "passkeypier/report/v1",
+  "tool": "passkeypier",
+  "generated_at": "<RFC3339 UTC>",
+  "summary": { "total": 9, "passed": 9, "failed": 0, "all_passed": true },
+  "categories": [ { "category": "security", "passed": 3, "failed": 0 } ],
+  "results": [
+    {
+      "name": "authenticate/wrong-origin",
+      "category": "authentication",
+      "description": "…",
+      "expectation": "reject",
+      "outcome": "pass",
+      "detail": "rejected as expected: harbor: origin …",
+      "duration_ns": 123456
+    }
+  ]
+}
+```
+
+A scenario's `outcome` is `pass` when the actual result matches its
+`expectation`. A negative scenario (`expectation = reject`) that is instead
+accepted is a conformance failure. The TypeScript lab validates this shape
+before rendering.
+
+## 8. Threat scenarios exercised
+
+- Foreign origin in client data → rejected.
+- Replayed / mismatched challenge → rejected.
+- Non-increasing signature counter → rejected.
+- Tampered / forged assertion signature → rejected.
+- Foreign RP ID hash → rejected.
+- `UV = required` without UV capability → rejected.
+
+## 9. References
+
+- W3C Web Authentication: An API for accessing Public Key Credentials, Level 2.
+- RFC 8032 — Edwards-Curve Digital Signature Algorithm (EdDSA).
+- RFC 9053 — CBOR Object Signing and Encryption (COSE) algorithms (EdDSA `-8`).
+
+// draft note 4
