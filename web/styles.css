@@ -192,3 +192,51 @@ main {
 }
 
 .sc-name {
+  font-family: var(--mono);
+  font-weight: 600;
+}
+
+.sc-cat,
+.sc-exp,
+.sc-dur {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-family: var(--mono);
+}
+
+.sc-dur {
+  margin-left: auto;
+}
+
+.sc-body {
+  padding: 0 0.9rem 0.75rem;
+}
+
+.sc-detail {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+}
+
+.error-box {
+  border: 1px solid var(--fail);
+  background: rgba(255, 107, 107, 0.1);
+  border-radius: 8px;
+  padding: 1rem;
+  color: var(--fail);
+}
+
+.footer {
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  padding: 1rem 2rem 2rem;
+  max-width: 960px;
+  margin: 0 auto;
+  font-size: 0.85rem;
+}
+
+code {
+  font-family: var(--mono);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+}
