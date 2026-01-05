@@ -84,3 +84,20 @@ func ParseAuthenticatorData(raw []byte) (AuthenticatorData, error) {
 	ad.Flags = raw[32]
 	ad.SignCount = binary.BigEndian.Uint32(raw[33:37])
 	if len(raw) > 37 {
+		ad.Trailing = append([]byte(nil), raw[37:]...)
+	}
+	return ad, nil
+}
+
+// Has reports whether a flag bit is set.
+func (ad AuthenticatorData) Has(flag byte) bool { return ad.Flags&flag != 0 }
+
+// RPIDHash computes the SHA-256 of a relying-party identifier, as stored in the
+// first 32 bytes of authenticator data.
+func RPIDHash(rpID string) [32]byte {
+	return sha256.Sum256([]byte(rpID))
+}
+
+// errNoAttestedData is returned when attested credential data is requested but
+// the AT flag is not set.
+var errNoAttestedData = errors.New("harbor: authenticator data has no attested credential data")
