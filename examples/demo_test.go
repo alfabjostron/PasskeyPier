@@ -50,3 +50,19 @@ func Example_registerAndAuthenticate() {
 	}
 	fmt.Printf("authenticated userHandle=%s sigLen=%d\n", string(auth.UserHandle), len(auth.Signature))
 
+	// Output:
+	// registered=true userVerified=true
+	// authenticated userHandle=mariner-1 sigLen=64
+}
+
+// ExampleConformanceSuite runs the built-in scenario suite and prints the
+// summary counts, showing how a report is produced programmatically.
+func Example_conformanceSuite() {
+	results := harbor.RunScenarios(harbor.DefaultScenarios())
+	report := harbor.BuildReport(results)
+	fmt.Printf("all passed: %v (%d scenarios)\n", report.Summary.AllPassed, report.Summary.Total)
+	// Output:
+	// all passed: true (9 scenarios)
+}
+
+// draft note 3
