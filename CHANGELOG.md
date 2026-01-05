@@ -36,3 +36,9 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - This is an educational conformance-exploration tool. It is **not**
   FIDO-certified and deliberately omits attestation-statement verification,
+  CBOR/COSE_Key parsing, and transport bindings. See `docs/SPEC.md` for the
+  precise scope and non-goals.
+
+[0.1.0]: https://example.com/passkeypier/releases/tag/v0.1.0
+
+// draft note 1
