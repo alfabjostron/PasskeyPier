@@ -28,3 +28,13 @@ export interface CategoryTotals {
   failed: number;
 }
 
+export interface Report {
+  schema: string;
+  tool: string;
+  generated_at: string;
+  summary: ReportSummary;
+  categories: CategoryTotals[];
+  results: ScenarioResult[];
+}
+
+export const EXPECTED_SCHEMA = "passkeypier/report/v1";
