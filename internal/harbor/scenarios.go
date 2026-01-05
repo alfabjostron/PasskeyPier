@@ -236,3 +236,40 @@ func DefaultScenarios() []Scenario {
 				reg, err := registerHelper(rp, va, UVPreferred)
 				if err != nil {
 					return err
+				}
+				return tamperedSignatureCheck(rp, reg)
+			},
+		},
+		{
+			Name:        "authenticate/wrong-rp-binding",
+			Category:    "security",
+			Description: "Authenticator data carrying a foreign RP ID hash must fail the RP ID hash check.",
+			Expectation: ExpectReject,
+			Run: func() error {
+				return rpIDHashMismatchCheck(otherRP, rpID)
+			},
+		},
+	}
+}
+
+// RunScenarios executes all scenarios and returns their results sorted by name.
+func RunScenarios(scenarios []Scenario) []ScenarioResult {
+	results := make([]ScenarioResult, 0, len(scenarios))
+	for _, s := range scenarios {
+		start := nowNS()
+		err := s.Run()
+		dur := nowNS() - start
+		outcome, detail := s.evaluate(err)
+		results = append(results, ScenarioResult{
+			Name:        s.Name,
+			Category:    s.Category,
+			Description: s.Description,
+			Expectation: s.Expectation,
+			Outcome:     outcome,
+			Detail:      detail,
+			DurationNS:  dur,
+		})
+	}
+	sort.Slice(results, func(i, j int) bool { return results[i].Name < results[j].Name })
+	return results
+}
