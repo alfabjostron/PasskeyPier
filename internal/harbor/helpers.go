@@ -60,3 +60,16 @@ func tamperedSignatureCheck(rp *RelyingParty, reg *RegistrationResult) error {
 	signed := append(append([]byte(nil), assertAD...), cdHash...)
 	forged := ed25519.Sign(forgePriv, signed)
 
+	return VerifyAssertionSignature(stored.PublicKey, assertAD, cdHash, forged)
+}
+
+// rpIDHashMismatchCheck builds authenticator data whose RP ID hash is for
+// wrongRPID and verifies it against expectRPID, exercising the RP ID hash
+// verification path directly. It must return an error.
+func rpIDHashMismatchCheck(wrongRPID, expectRPID string) error {
+	ad := AuthenticatorData{
+		RPIDHash: RPIDHash(wrongRPID),
+		Flags:    FlagUserPresent | FlagUserVerified,
+	}
+	return verifyRPIDHash(ad, expectRPID)
+}
