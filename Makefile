@@ -43,3 +43,21 @@ demo: ## run one register+authenticate ceremony
 web-sample: ## generate the sample report consumed by the web lab
 	$(GO) run ./cmd/passkeypier run -format json -out web/sample-report.json
 	$(GO) run ./cmd/passkeypier run -format json -out examples/sample-report.json
+
+.PHONY: web-typecheck
+web-typecheck: ## typecheck the TypeScript lab (needs tsc)
+	cd web && tsc --noEmit
+
+.PHONY: web-build
+web-build: ## compile the TypeScript lab to web/dist
+	cd web && tsc
+
+.PHONY: clean
+clean: ## remove build artifacts
+	-rm -f $(BIN) $(BIN).exe $(REPORT)
+	-rm -rf web/dist
+
+.PHONY: help
+help: ## list targets
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
+		awk 'BEGIN {FS = ":.*?## "}; {printf "  %-16s %s\n", $$1, $$2}'
