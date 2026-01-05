@@ -301,3 +301,117 @@ _ = report.WriteJSON(os.Stdout) // or report.WriteText(os.Stdout)
 ---
 
 ## The browser lab
+
+The lab in [`web/`](web/) is a small, dependency-light TypeScript app. It:
+
+- validates an untrusted report against the `passkeypier/report/v1` schema
+  before rendering, rejecting bad types, unknown outcomes, and a wrong schema;
+- renders a pass or fail banner, per-category cards, and expandable scenarios;
+- builds DOM nodes with `textContent` and never `innerHTML` from report data;
+- runs fully offline, with no CDN, fonts, images, or telemetry. A sample report
+  is embedded in the page so it works with zero network access.
+
+```sh
+cd web
+tsc --noEmit     # strict typecheck
+tsc              # compile to web/dist
+```
+
+Then open `web/index.html` in a browser and either drop a `report.json` onto the
+dock, choose a file, or click **Load bundled sample**.
+
+> The lab is a report viewer and teaching aid. It does not itself invoke the
+> browser WebAuthn API; the ceremonies are performed by the Go core.
+
+---
+
+## Layout of the harbor
+
+```
+passkeypier/
+├── cmd/passkeypier/        # CLI: run | demo | list | version
+│   └── main.go
+├── internal/harbor/        # standard-library ceremony core
+│   ├── base64url.go        # unpadded base64url
+│   ├── challenge.go        # crypto/rand challenges
+│   ├── model.go            # client data, authenticator data, flags
+│   ├── authenticator.go    # virtual Ed25519 authenticator + counters
+│   ├── relyingparty.go     # RP config, UV policy, options
+│   ├── ceremony.go         # register/authenticate + all verifications
+│   ├── scenarios.go        # built-in conformance suite
+│   ├── report.go           # JSON + text report engine
+│   ├── helpers.go          # negative-test primitives
+│   ├── json.go             # strict decode + origin constructors
+│   └── harbor_test.go      # focused unit tests
+├── examples/               # runnable examples + sample report
+│   ├── demo_test.go
+│   └── sample-report.json
+├── web/                    # dependency-light TypeScript browser lab
+│   ├── src/{types,report,render,main}.ts
+│   ├── index.html
+│   ├── styles.css
+│   ├── tsconfig.json
+│   └── package.json
+├── docs/
+│   ├── SPEC.md             # precise scope, data model, non-goals
+│   └── assets/             # two original SVG diagrams (no remote media)
+├── .github/workflows/ci.yml
+├── Makefile
+├── go.mod
+├── LICENSE
+├── CHANGELOG.md
+└── .gitignore
+```
+
+---
+
+## Building, testing, and CI
+
+```sh
+go build ./...            # compile everything
+go vet ./...              # static checks
+go test ./...             # unit tests + runnable examples
+go test -cover ./...      # with coverage
+```
+
+The Go core uses only the standard library, so `go.mod` declares no external
+requirements. CI ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) runs
+two jobs:
+
+- **Go**: verifies `go.mod` is tidy, then runs `vet`, `build`, `test -cover`,
+  and a JSON-report smoke run.
+- **TypeScript**: installs the pinned compiler, then runs `tsc --noEmit` and
+  `tsc`.
+
+---
+
+## Design notes and honest limits
+
+passkeypier is intentionally narrow so that what it does implement stays
+faithful:
+
+- **No attestation trust.** Registration attestation is treated as
+  `none`-equivalent. No `packed`, `tpm`, `apple`, or `fido-u2f` statements are
+  parsed or trusted. A passing report is not attestation validation.
+- **No CBOR or COSE_Key.** The credential public key is modeled as a raw 32-byte
+  Ed25519 key rather than a COSE_Key CBOR map. Signatures verify against the
+  stored key object.
+- **Ed25519 only.** ES256 (`-7`) and RS256 (`-257`) are out of scope.
+- **RP ID matching is exact.** There is no registrable-domain-suffix walking.
+- **No transport or CTAP framing, extensions, or enterprise features.**
+
+These boundaries are documented precisely in [`docs/SPEC.md`](docs/SPEC.md). The
+counter policy, UV policy table, and signed-message construction there match the
+code exactly. If you need certified behavior, use a certified stack; passkeypier
+exists to make the ceremony legible.
+
+The tool follows the relevant public specifications for structure: W3C Web
+Authentication Level 2, RFC 8032 (EdDSA), and RFC 9053 (COSE EdDSA `-8`).
+
+---
+
+## License
+
+Released under the [MIT License](LICENSE). Copyright 2026 PasskeyPier contributors.
+
+// draft note 2
