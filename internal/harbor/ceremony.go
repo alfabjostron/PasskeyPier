@@ -286,4 +286,4 @@ func verifyCounter(stored, got uint32) error {
 		return fmt.Errorf("harbor: signature counter did not increase (stored=%d, got=%d): possible cloned authenticator", stored, got)
 	}
 	return nil
-// review note
+}
