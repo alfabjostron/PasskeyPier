@@ -59,3 +59,19 @@ function wireSample(): void {
     if (script && script.textContent) {
       handleText(script.textContent);
     } else {
+      renderError(getTarget(), "no bundled sample report is embedded on this page");
+    }
+  });
+}
+
+function main(): void {
+  wireFileInput();
+  wireDrop();
+  wireSample();
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", main);
+} else {
+  main();
+}
