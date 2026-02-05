@@ -25,3 +25,10 @@ func NewChallenge(n int) (Challenge, error) {
 	buf := make([]byte, n)
 	if _, err := rand.Read(buf); err != nil {
 		return nil, fmt.Errorf("harbor: reading random challenge: %w", err)
+	}
+	return Challenge(buf), nil
+}
+
+// String renders the challenge as base64url, matching how it appears on the
+// wire inside client data JSON.
+func (c Challenge) String() string { return EncodeBase64URL(c) }
