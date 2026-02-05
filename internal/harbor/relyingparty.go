@@ -65,4 +65,4 @@ type AuthenticationOptions struct {
 	UserVerification UserVerification
 	// AllowCredentialID optionally restricts which credential may respond.
 	AllowCredentialID []byte
-// review note
+}
