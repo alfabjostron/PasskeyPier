@@ -89,3 +89,22 @@ function renderScenario(r: ScenarioResult): HTMLElement {
 // renderReport clears the target and renders the full report into it.
 export function renderReport(target: HTMLElement, report: Report): void {
   target.textContent = "";
+  target.appendChild(renderSummary(report));
+  target.appendChild(renderCategories(report));
+
+  const results = el("div", "results");
+  results.appendChild(el("h2", undefined, "Scenarios"));
+  for (const r of report.results) {
+    results.appendChild(renderScenario(r));
+  }
+  target.appendChild(results);
+}
+
+// renderError displays a validation or load error in the target.
+export function renderError(target: HTMLElement, message: string): void {
+  target.textContent = "";
+  const box = el("div", "error-box");
+  box.appendChild(el("strong", undefined, "Could not render report"));
+  box.appendChild(el("p", undefined, message));
+  target.appendChild(box);
+}
