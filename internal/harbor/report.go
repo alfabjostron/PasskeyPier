@@ -97,3 +97,23 @@ func (r Report) WriteText(w io.Writer) error {
 		if res.Outcome != OutcomePass {
 			mark = "FAIL"
 		}
+		fmt.Fprintf(&b, "[%s] %-42s (%s, expect %s)\n", mark, res.Name, res.Category, res.Expectation)
+		fmt.Fprintf(&b, "       %s\n", res.Detail)
+	}
+
+	b.WriteString("\nby category:\n")
+	for _, c := range r.Categories {
+		fmt.Fprintf(&b, "  %-14s pass=%d fail=%d\n", c.Category, c.Passed, c.Failed)
+	}
+
+	fmt.Fprintf(&b, "\nsummary: %d passed, %d failed of %d total\n",
+		r.Summary.Passed, r.Summary.Failed, r.Summary.Total)
+	if r.Summary.AllPassed {
+		b.WriteString("result: ALL SCENARIOS PASSED\n")
+	} else {
+		b.WriteString("result: CONFORMANCE FAILURES PRESENT\n")
+	}
+
+	_, err := io.WriteString(w, b.String())
+	return err
+}
