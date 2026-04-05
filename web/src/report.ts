@@ -93,3 +93,23 @@ export function parseReport(raw: unknown): Report {
     },
     categories: categoriesRaw.map((c) => {
       if (!isObject(c)) throw new ReportError("category must be an object");
+      return {
+        category: requireString(c, "category"),
+        passed: requireNumber(c, "passed"),
+        failed: requireNumber(c, "failed"),
+      };
+    }),
+    results: resultsRaw.map(parseScenario),
+  };
+}
+
+// parseReportText parses a JSON string into a validated Report.
+export function parseReportText(text: string): Report {
+  let raw: unknown;
+  try {
+    raw = JSON.parse(text);
+  } catch (e) {
+    throw new ReportError(`invalid JSON: ${(e as Error).message}`);
+  }
+  return parseReport(raw);
+}
