@@ -153,4 +153,4 @@ func cmdList() int {
 		fmt.Printf("%-44s [%s, expect %s]\n    %s\n", s.Name, s.Category, s.Expectation, s.Description)
 	}
 	return 0
-// review note
+}
