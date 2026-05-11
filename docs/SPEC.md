@@ -182,4 +182,4 @@ before rendering.
 - RFC 8032 — Edwards-Curve Digital Signature Algorithm (EdDSA).
 - RFC 9053 — CBOR Object Signing and Encryption (COSE) algorithms (EdDSA `-8`).
 
-// draft note 12
+// draft note 20
