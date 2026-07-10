@@ -19,3 +19,4 @@ ceremony as a self-contained, runnable transcript. Run it with:
 
 ```sh
 go test ./examples/ -run Example -v
+```
