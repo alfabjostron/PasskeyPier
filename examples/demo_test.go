@@ -64,5 +64,3 @@ func Example_conformanceSuite() {
 	// Output:
 	// all passed: true (9 scenarios)
 }
-
-// draft note 35
