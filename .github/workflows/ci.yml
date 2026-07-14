@@ -48,5 +48,3 @@ jobs:
         run: npx tsc --noEmit
       - name: Build
         run: npx tsc
-
-// draft note 39
