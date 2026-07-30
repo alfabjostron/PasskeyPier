@@ -2,4 +2,8 @@ blank_issues_enabled: false
 contact_links:
   - name: Ceremony format questions
     url: https://github.com/alfabjostron/PasskeyPier/discussions
-    about: Ceremony/report format questions go to Discussions first
+    about: Ceremony and report format questions go to Discussions first
+  - name: Scenario matrix requests
+    url: https://github.com/alfabjostron/PasskeyPier/discussions/categories/scenarios
+    about: Propose new relying-party scenarios for the harbor matrix
+
