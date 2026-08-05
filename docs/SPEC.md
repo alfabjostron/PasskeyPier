@@ -181,5 +181,3 @@ before rendering.
 - W3C Web Authentication: An API for accessing Public Key Credentials, Level 2.
 - RFC 8032 — Edwards-Curve Digital Signature Algorithm (EdDSA).
 - RFC 9053 — CBOR Object Signing and Encryption (COSE) algorithms (EdDSA `-8`).
-
-// draft note 36
