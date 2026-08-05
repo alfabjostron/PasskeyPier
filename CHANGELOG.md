@@ -40,5 +40,3 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   precise scope and non-goals.
 
 [0.1.0]: https://example.com/passkeypier/releases/tag/v0.1.0
-
-// draft note 41
