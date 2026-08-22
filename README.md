@@ -413,5 +413,3 @@ Authentication Level 2, RFC 8032 (EdDSA), and RFC 9053 (COSE EdDSA `-8`).
 ## License
 
 Released under the [MIT License](LICENSE). Copyright 2026 PasskeyPier contributors.
-
-// draft note 42
